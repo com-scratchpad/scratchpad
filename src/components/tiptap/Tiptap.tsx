@@ -7,6 +7,7 @@ import { Bold, Italic, Strikethrough } from "lucide-react";
 export default () => {
 	const editor = useEditor({
 		extensions: [StarterKit],
+		autofocus: true,
 		content: `
       <p>
         Write some text here...
