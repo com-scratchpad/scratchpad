@@ -17,6 +17,7 @@
     "@radix-ui/react-toggle": "^1.1.0",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-shell": "^2",
+    "@tiptap/extension-placeholder": "^2.10.3",
     "@tiptap/pm": "^2.10.3",
     "@tiptap/react": "^2.10.3",
     "@tiptap/starter-kit": "^2.10.3",

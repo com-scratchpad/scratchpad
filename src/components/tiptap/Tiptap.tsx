@@ -3,23 +3,42 @@ import StarterKit from "@tiptap/starter-kit";
 import "./Tiptap.css";
 import { Toggle } from "@/components/ui/toggle";
 import { Bold, Italic, Strikethrough } from "lucide-react";
+import Placeholder from "@tiptap/extension-placeholder";
 
 export default () => {
 	const editor = useEditor({
-		extensions: [StarterKit],
+		extensions: [
+			StarterKit,
+			Placeholder.configure({
+				placeholder: "Write something…",
+			}),
+		],
 		autofocus: true,
-		content: `
-      <p>
-        Write some text here...
-      </p>
-    `,
+		editorProps: {
+			attributes: {
+				class: "flex-1 h-full overscroll-auto",
+			},
+		},
+		content: ``,
 	});
 
+	const handleContainerClick = () => {
+		if (editor && !editor.isFocused) {
+			editor.commands.focus("end");
+		}
+	};
+
 	return (
-		<>
+		<div
+			className="h-full w-full overflow-scroll"
+			onClick={handleContainerClick}
+		>
 			{editor && (
 				<BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-					<div className="flex flex-row items-center justify-center text-xs shadow-lg border h-8 rounded-md p-0.5 space-x-0.5">
+					<div
+						className="flex flex-row items-center justify-center text-xs shadow-lg border h-8 rounded-md p-0.5 space-x-0.5"
+						onClick={(e) => e.stopPropagation()}
+					>
 						<Toggle
 							size={"xs"}
 							aria-label="Toggle bold"
@@ -47,7 +66,7 @@ export default () => {
 					</div>
 				</BubbleMenu>
 			)}
-			<EditorContent editor={editor} className="mx-24 my-24 h-full text-xs" />
-		</>
+			<EditorContent editor={editor} className="mx-24 mt-24 text-xs" />
+		</div>
 	);
 };

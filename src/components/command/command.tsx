@@ -3,6 +3,7 @@ import {
 	Calculator,
 	Calendar,
 	CreditCard,
+	Search,
 	Settings,
 	Smile,
 	User,
@@ -24,7 +25,7 @@ export function CommandDialogDemo() {
 
 	React.useEffect(() => {
 		const down = (e: KeyboardEvent) => {
-			if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
+			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
 				setOpen((open) => !open);
 			}
@@ -45,16 +46,8 @@ export function CommandDialogDemo() {
 					<CommandEmpty>No results found.</CommandEmpty>
 					<CommandGroup heading="Suggestions">
 						<CommandItem>
-							<Calendar />
-							<span>Calendar</span>
-						</CommandItem>
-						<CommandItem>
-							<Smile />
-							<span>Search Emoji</span>
-						</CommandItem>
-						<CommandItem>
-							<Calculator />
-							<span>Calculator</span>
+							<Search />
+							<span>Search Files</span>
 						</CommandItem>
 					</CommandGroup>
 					<CommandSeparator />

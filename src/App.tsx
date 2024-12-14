@@ -1,31 +1,18 @@
 import "./App.css";
 import Tiptap from "@/components/tiptap/Tiptap";
-import { ThemeProvider } from "@/providers/theme/theme";
 import { CommandDialogDemo } from "./components/command/command";
-import { useEffect, useState } from "react";
 
 function App() {
-	const [open, setOpen] = useState(false);
-
-	useEffect(() => {
-		const down = (e: KeyboardEvent) => {
-			if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
-				e.preventDefault();
-				setOpen((open) => !open);
-			}
-		};
-
-		document.addEventListener("keydown", down);
-		return () => document.removeEventListener("keydown", down);
-	}, []);
-
 	return (
-		<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-			<main>
-				<Tiptap />
-				<CommandDialogDemo />
-			</main>
-		</ThemeProvider>
+		<div>
+			<CommandDialogDemo />
+			<div className="h-screen w-full flex flex-col ">
+				<div className="h-7 flex-0 px-2"></div>
+				<div className="overflow-hidden h-full">
+					<Tiptap />
+				</div>
+			</div>
+		</div>
 	);
 }
 
