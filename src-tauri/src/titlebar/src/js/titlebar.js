@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		tbEl.style.top = 0;
 		tbEl.style.left = 0;
 		tbEl.style.zIndex = 100;
-		tbEl.style.width = "10%";
+		tbEl.style.width = "0%";
 		tbEl.style.height = "32px";
 		tbEl.style.display = "flex";
 		tbEl.style.position = "fixed";
@@ -32,4 +32,3 @@ document.addEventListener("DOMContentLoaded", () => {
 		document.body.appendChild(tbEl);
 	}
 });
-
