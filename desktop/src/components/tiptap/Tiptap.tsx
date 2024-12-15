@@ -4,6 +4,7 @@ import "./Tiptap.css";
 import { Toggle } from "@/components/ui/toggle";
 import { Bold, Italic, Strikethrough } from "lucide-react";
 import Placeholder from "@tiptap/extension-placeholder";
+import { invoke } from "@tauri-apps/api/core";
 
 export default () => {
 	const editor = useEditor({
@@ -20,6 +21,10 @@ export default () => {
 			},
 		},
 		content: ``,
+		onUpdate({ editor }) {
+			const content = editor.getHTML();
+			invoke("save", { content });
+		},
 	});
 
 	const handleContainerClick = () => {
