@@ -24,5 +24,9 @@ dist-ssr
 *.sln
 *.sw?
 
+*.env
+
+__pycache__/
+
 bun.lockb
 

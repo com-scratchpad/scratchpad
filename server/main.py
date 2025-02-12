@@ -1,15 +1,7 @@
 from typing import List, Optional, Union
 from pydantic import BaseModel
 from fastapi import FastAPI, Request, Response
-from supabase import create_client, Client
-from openai import OpenAI
 
-url: str = "https://htjxsnnnkewusotqxwmy.supabase.co"
-key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0anhzbm5ua2V3dXNvdHF4d215Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ3MjU4MTIsImV4cCI6MjA1MDMwMTgxMn0.EgBBkKpV_KtLJaNVWOGlR2bBTfUNzJoPURpcWnS8KvA"
-
-client = OpenAI(
-    api_key="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")
-supabase: Client = create_client(url, key)
 
 secure_app = FastAPI(openapi_prefix="/secure")
 public_app = FastAPI(openapi_prefix="/public")
