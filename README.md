@@ -8,7 +8,7 @@ Prerequisites
 ###
     curl -fsSL https://bun.sh/install | bash
 
-3. Ensure you have environment variables set below
+3. Ensure you have environment variables set below in a `.env` file in the `server` folder.
 ##
     export SUPABASE_URL="<url to supabase>"
     export SUPABASE_KEY="<supabase secret>"
