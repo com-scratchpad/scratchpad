@@ -3,8 +3,8 @@ from pydantic import BaseModel
 from fastapi import FastAPI, Request, Response
 
 
-secure_app = FastAPI(openapi_prefix="/secure")
-public_app = FastAPI(openapi_prefix="/public")
+secure_app = FastAPI(root_path="/secure")
+public_app = FastAPI(root_path="/public")
 
 app = FastAPI()
 app.mount("/secure", secure_app)
