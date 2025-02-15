@@ -8,6 +8,13 @@ Prerequisites
 ###
     curl -fsSL https://bun.sh/install | bash
 
+3. Ensure you have environment variables set below
+##
+    export SUPABASE_URL="<url to supabase>"
+    export SUPABASE_KEY="<supabase secret>"
+    
+    export OPENAI_API_KEY="<openai secret>"
+
 Running desktop frontend
 ---
 Go into directory `scratchpad/desktop`, then run `bun run tauri dev`
