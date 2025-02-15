@@ -12,12 +12,12 @@ Running desktop frontend
 ---
 Go into directory `scratchpad/desktop`, then run `bun run tauri dev`
 ##
-  cd <scratchpad directory>/desktop
-  bun run tauri dev
+      cd <scratchpad directory>/desktop
+      bun run tauri dev
 
 Running backend
 ---
 Go into directory `scratchpad/server`, then run `uv run fastapi dev`
 ##
-  cd <scratchpad directory>/server
-  uv run fastapi dev
+      cd <scratchpad directory>/server
+      uv run fastapi dev
