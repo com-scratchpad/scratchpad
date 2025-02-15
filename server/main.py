@@ -1,5 +1,4 @@
-from typing import List, Optional, Union
-from httpx import HTTPError
+from typing import List, Optional
 from pydantic import BaseModel
 from fastapi import FastAPI, Request, Response
 from supabase import create_client, Client
@@ -32,10 +31,19 @@ app = FastAPI()
 app.mount("/secure", secure_app)
 app.mount("/public", public_app)
 
-def chunk_text(text: str, chunk_size: int = 1500, overlap: int = 150) -> List[Dict[str, str]]:
+def chunk_text(text: str, chunk_size: int = 256, overlap: int = 32) -> List[Dict[str, str]]:
     # Encode text
     enc = tiktoken.get_encoding("cl100k_base")
     tokens = enc.encode(text)
+
+    def get_embedding(chunk_tokens: List[int]):
+        try:
+            response = openai_client.embeddings.create(input=chunk_tokens,
+                                                       model="text-embedding-ada-002") 
+            return response.data[0].embedding  # Access the embedding
+        except Exception as e:
+            print(f"Error occurred when retrieving embedding: {e}")
+
 
     chunks = []
     for i in range(0, len(tokens), chunk_size - overlap):
@@ -43,8 +51,9 @@ def chunk_text(text: str, chunk_size: int = 1500, overlap: int = 150) -> List[Di
         chunk_text = enc.decode(chunk_tokens)
         chunks.append({
             "content": chunk_text,
-            "embedding": chunk_tokens
+            "embedding": get_embedding(chunk_tokens)
         })
+    print("chunks: ", chunks)
 
     return chunks
 
@@ -66,12 +75,18 @@ async def create_item(item: ItemCreate, request: Request):
     if not hasattr(request.state, 'user_id'):
         return Response("User not authenticated", status_code=401)
 
-    document = supabase_client.table("Documents").insert({
-        "user_id": request.state.user_id,
-        "name": item.name,
-    }).execute()
-    
-    
+    try:
+        document = supabase_client.table("Documents").insert({
+            "user_id": request.state.user_id,
+            "name": item.name,
+        }).execute()
+    except Exception as e:
+        print(f"Failed to save chunk with exception: {e}") 
+        return {
+                "message": f"Failed to save chunk with exception: {e}"
+        }
+          
+
     document_id = document.data[0]["id"]
     chunks = chunk_text(item.file_content)
     saved_chunks = []
@@ -96,12 +111,29 @@ async def create_item(item: ItemCreate, request: Request):
                     "message": f"Failed to save chunk with exception: {e}"
             }
           
-    
     return {
         "document_id": document_id,
         "total_chunks": len(saved_chunks),
         "chunks": saved_chunks
     }
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+@public_app.post("/login")
+async def login(req: LoginRequest):
+    resp = supabase_client.auth.sign_in_with_password({
+        "email": req.email,
+        "password": req.password,
+    })
+    if resp.user is not None:
+        print(resp.user.id)
+    if resp.session is not None:
+        return resp.session.access_token
+    return Response(status_code=401)
 
 
 @secure_app.middleware("http")
