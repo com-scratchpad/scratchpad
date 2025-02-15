@@ -122,3 +122,21 @@ async def add_authentication(request: Request, call_next):
 
     supabase_client.postgrest.auth(token)
     return await call_next(request)
+
+
+class DeleteRequest(BaseModel):
+    document_id: str
+
+async def delete_document(request: DeleteRequest):
+    documentId = request.document_id
+    try:
+        response = supabase_client.table("Documents").delete().eq("id", documentId).execute()
+        if not response.status_code.is_success():
+            return Response(f"Encountered error while deleting from document table: {response.message} ", status_code=response.status_code)
+        response = supabase_client.table("Chunks").delete().eq("document_id", documentId).execute()
+        if not response.status_code.is_success():
+            return Response(f"Encountered error while deleting from chunks table: {response.message} ", status_code=response.status_code)
+        return Response("Document deleted successfully", status_code=200)
+    except Exception as e:
+        print(f"Failed to delete document with exception: {e}")
+        return Response(f"Failed to delete document with exception: {e}", status_code=500)
