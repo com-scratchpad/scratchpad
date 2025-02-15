@@ -1,99 +1,108 @@
 from typing import List, Optional, Union
 from pydantic import BaseModel
 from fastapi import FastAPI, Request, Response
+from supabase import create_client, Client
+from openai import OpenAI
+from dotenv import load_dotenv
+from postgrest import APIError  # Add this import
+import os
+import tiktoken
+from typing import Dict
 
 
-secure_app = FastAPI(root_path="/secure")
-public_app = FastAPI(root_path="/public")
+load_dotenv()
+
+url: str = os.getenv("SUPABASE_URL")
+key: str = os.getenv("SUPABASE_KEY")
+
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"))
+
+supabase: Client = create_client(url, key)
+
+secure_app = FastAPI(openapi_prefix="/secure")
+public_app = FastAPI(openapi_prefix="/public")
 
 app = FastAPI()
 app.mount("/secure", secure_app)
 app.mount("/public", public_app)
 
+def chunk_text(text: str, chunk_size: int = 1500, overlap: int = 150) -> List[Dict[str, str]]:
+    enc = tiktoken.get_encoding("cl100k_base")
+    tokens = enc.encode(text)
+    print(tokens)
+    chunks = []
+    
+    for i in range(0, len(tokens), chunk_size - overlap):
+        chunk_tokens = tokens[i:i + chunk_size]
+        chunk_text = enc.decode(chunk_tokens)
+        chunks.append({
+            "content": text,
+            "chunk_index": len(chunks),
+            "embedding": chunk_tokens
+        })
+        # print("CHUNK TEXT", chunk_text)
+   
+    
+    return chunks
+
+
 
 class ItemCreate(BaseModel):
-    user_name: str
+    name: str
     file_content: str
     embedding: Optional[List[float]] = None
 
 
-def create_embedding(file_content):
-    embedding_response = client.embeddings.create(
-        input=file_content,
-        model="text-embedding-ada-002"
-    )
+@secure_app.post("/items/")
+async def create_item(item: ItemCreate, request: Request):
+    if not hasattr(request.state, 'user_id'):
+        return Response("User not authenticated", status_code=401)
 
-    embedding = embedding_response.data[0].embedding
+    doc_response = supabase.table("Documents").insert({
+        "user_id": request.state.user_id,
+        "name": item.name,
+    }).execute()
+    
+    
+    document_id = doc_response.data[0]["id"]
+    chunks = chunk_text(item.file_content)
+    stored_chunks = []
+    
+    print(chunks)
 
-    # Validation
-    if len(embedding) != 1536:
-        raise ValueError(f"""Unexpected embedding dimensions. Expected 1536,
-                         got {len(embedding)}""")
+    for chunk_index, chunk in enumerate(chunks):
+        embedding = chunk["embedding"]
+        chunk_data = {
+            "document_id": document_id,
+            "content": chunk["content"],
+            "chunk_index": chunk_index,
+            "embedding": embedding
+            
+        }
+        print("EMBEDDING", embedding)
+        
+        print("response enter")
+        try:
 
-    return embedding
+            response = supabase.table("Chunks").insert(chunk_data).execute()
 
+            if response.data:
+                print("no data")
+                stored_chunks.append(response.data[0])
+        
+        except Exception as e:
+            print(f"An error occurred: {e}") 
+          
+        
+        print("response finish")
 
-@public_app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@public_app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@public_app.post("/items/")
-async def create_item(item: ItemCreate):
-
-    embedding = create_embedding(item.file_content)
-    response = supabase.table("items").insert(
-        {"user_name": item.user_name,
-            "file_content": item.file_content, "embedding": embedding}
-    ).execute()
-
-    created_item = response.data[0]
-
+    
     return {
-        "id": created_item["id"],
-        "user_name": created_item["user_name"],
-        "file_content": created_item["file_content"],
-        "embedding": created_item["embedding"]
+        "document_id": document_id,
+        "total_chunks": len(stored_chunks),
+        "chunks": stored_chunks
     }
-
-
-class RegisterRequest(BaseModel):
-    email: str
-    password: str
-
-
-@public_app.post("/register/")
-async def register(
-        req: RegisterRequest,
-):
-    resp = supabase.auth.sign_up({
-        "email": req.email,
-        "password": req.password})
-    print(resp)
-    access_token = resp.get("access_token")
-    return Response(access_token, status_code=200)
-
-
-@public_app.post("/login")
-async def login(
-        email: str,
-        password: str,
-):
-    resp = supabase.auth.sign_in_with_password({
-        "email": email,
-        "password": password,
-    })
-    if resp.user is not None:
-        print(resp.user.id)
-    if resp.session is not None:
-        return resp.session.access_token
-    return Response(status_code=401)
-
 
 @secure_app.middleware("http")
 async def add_authentication(request: Request, call_next):
@@ -101,19 +110,20 @@ async def add_authentication(request: Request, call_next):
         return await call_next(request)
 
     token = request.headers.get("authorization", "").replace("Bearer ", "")
-
     if not token:
         return Response("Unauthorized", status_code=401)
 
-    try:
-        auth = supabase.auth.get_user(token)
-        if auth is not None and auth.user is not None:
-            request.state.user_id = auth.user.id
-        else:
-            return Response("Failed to get user", status_code=401)
-        supabase.postgrest.auth(token)
-
-    except Exception:
-        return Response("Invalid user token", status_code=401)
-
+    auth = supabase.auth.get_user(token)
+    if auth is not None and auth.user is not None:
+        request.state.user_id = auth.user.id
+    else:
+        return Response("Failed to get user", status_code=401)
+    
+    supabase.postgrest.auth(token)
     return await call_next(request)
+
+@secure_app.get("/items")
+async def get_user_items(request: Request):
+    user_id = request.state.user_id
+    response = supabase.table("items").select("*").execute()
+    return {"items": response.data}
