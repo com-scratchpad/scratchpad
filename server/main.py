@@ -111,7 +111,6 @@ async def create_item(item: ItemCreate, request: Request):
                     "message": f"Failed to save chunk with exception: {e}"
             }
           
-    
     return {
         "document_id": document_id,
         "total_chunks": len(saved_chunks),
@@ -119,31 +118,16 @@ async def create_item(item: ItemCreate, request: Request):
     }
 
 
-class RegisterRequest(BaseModel):
+class LoginRequest(BaseModel):
     email: str
     password: str
-@public_app.post("/register/")
-async def register(
-        req: RegisterRequest,
-):
-    # TODO: Fix the Register API
-    pass
-    # resp = supabase_client.auth.sign_up({
-        # "email": req.email,
-        # "password": req.password})
-    # print(resp)
-    # access_token = resp.get("access_token")
-    # return Response(access_token, status_code=200)
 
 
 @public_app.post("/login")
-async def login(
-        email: str,
-        password: str,
-):
+async def login(req: LoginRequest):
     resp = supabase_client.auth.sign_in_with_password({
-        "email": email,
-        "password": password,
+        "email": req.email,
+        "password": req.password,
     })
     if resp.user is not None:
         print(resp.user.id)
