@@ -37,10 +37,7 @@ class SummarizeRequest(BaseModel):
     name: str = "Summary"
 
 @secure_app.post("/summarize")
-async def summarize(req: SummarizeRequest, request: Request):
-    if not hasattr(request.state, 'user_id'):
-        return Response("User not authenticated", status_code=401)
-
+async def summarize(req: SummarizeRequest):
     chunks_text = "\n\n".join([f"Chunk {i+1}:\n{chunk}" for i, chunk in enumerate(req.chunks)])
     
     response = openai_client.chat.completions.create(
@@ -66,6 +63,8 @@ async def summarize(req: SummarizeRequest, request: Request):
         "summary": summary,
         "name": req.name
     }
+
+
 def get_embedding(chunk_tokens: List[int]):
     try:
         response = openai_client.embeddings.create(input=chunk_tokens,
@@ -74,14 +73,15 @@ def get_embedding(chunk_tokens: List[int]):
     except Exception as e:
         print(f"Error occurred when retrieving embedding: {e}")
 
+
 def tokenize_text(text: str):
     # Encode text
     encoder = tiktoken.get_encoding("cl100k_base")
     return encoder, encoder.encode(text)
 
+
 def chunk_text(text: str, chunk_size: int = 256, overlap: int = 32) -> List[Dict[str, str]]:
     encoder, tokens = tokenize_text(text)
-
     chunks = []
     for i in range(0, len(tokens), chunk_size - overlap):
         chunk_tokens = tokens[i:i + chunk_size]
@@ -95,27 +95,18 @@ def chunk_text(text: str, chunk_size: int = 256, overlap: int = 32) -> List[Dict
     return chunks
 
 
-@secure_app.get("/items")
-async def get_user_items(_: Request):
-    response = supabase_client.table("items").select("*").execute()
-    return {"items": response.data}
-
-
-class ItemCreate(BaseModel):
+class DocumentCreate(BaseModel):
     name: str
     file_content: str
     embedding: Optional[List[float]] = None
 
 
-@secure_app.post("/items/")
-async def create_item(item: ItemCreate, request: Request):
-    if not hasattr(request.state, 'user_id'):
-        return Response("User not authenticated", status_code=401)
-
+@secure_app.post("/document")
+async def create_document(document: DocumentCreate, request: Request):
     try:
-        document = supabase_client.table("Documents").insert({
+        response = supabase_client.table("Documents").insert({
             "user_id": request.state.user_id,
-            "name": item.name,
+            "name": document.name,
         }).execute()
     except Exception as e:
         print(f"Failed to save chunk with exception: {e}") 
@@ -124,8 +115,8 @@ async def create_item(item: ItemCreate, request: Request):
         }
           
 
-    document_id = document.data[0]["id"]
-    chunks = chunk_text(item.file_content)
+    document_id = response.data[0]["id"]
+    chunks = chunk_text(document.file_content)
     saved_chunks = []
 
     for idx, chunk in enumerate(chunks):
@@ -137,9 +128,9 @@ async def create_item(item: ItemCreate, request: Request):
         }
 
         try:
-            document = supabase_client.table("Chunks").insert(chunk_data).execute()
-            if document.data:
-                saved_chunks.append(document.data[0])
+            response = supabase_client.table("Chunks").insert(chunk_data).execute()
+            if response.data:
+                saved_chunks.append(response.data[0])
         except Exception as e:
             print(f"Failed to save chunk with exception: {e}") 
             return {
