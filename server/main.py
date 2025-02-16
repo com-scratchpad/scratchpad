@@ -31,24 +31,26 @@ app = FastAPI()
 app.mount("/secure", secure_app)
 app.mount("/public", public_app)
 
-def chunk_text(text: str, chunk_size: int = 256, overlap: int = 32) -> List[Dict[str, str]]:
+def get_embedding(chunk_tokens: List[int]):
+    try:
+        response = openai_client.embeddings.create(input=chunk_tokens,
+                                                   model="text-embedding-ada-002") 
+        return response.data[0].embedding  # Access the embedding
+    except Exception as e:
+        print(f"Error occurred when retrieving embedding: {e}")
+
+def tokenize_text(text: str):
     # Encode text
-    enc = tiktoken.get_encoding("cl100k_base")
-    tokens = enc.encode(text)
+    encoder = tiktoken.get_encoding("cl100k_base")
+    return encoder, encoder.encode(text)
 
-    def get_embedding(chunk_tokens: List[int]):
-        try:
-            response = openai_client.embeddings.create(input=chunk_tokens,
-                                                       model="text-embedding-ada-002") 
-            return response.data[0].embedding  # Access the embedding
-        except Exception as e:
-            print(f"Error occurred when retrieving embedding: {e}")
-
+def chunk_text(text: str, chunk_size: int = 256, overlap: int = 32) -> List[Dict[str, str]]:
+    encoder, tokens = tokenize_text(text)
 
     chunks = []
     for i in range(0, len(tokens), chunk_size - overlap):
         chunk_tokens = tokens[i:i + chunk_size]
-        chunk_text = enc.decode(chunk_tokens)
+        chunk_text = encoder.decode(chunk_tokens)
         chunks.append({
             "content": chunk_text,
             "embedding": get_embedding(chunk_tokens)
@@ -117,6 +119,25 @@ async def create_item(item: ItemCreate, request: Request):
         "chunks": saved_chunks
     }
 
+class SearchRequest(BaseModel):
+    query: str
+    matches: int = 5
+
+
+@secure_app.post("/search")
+async def search(req: SearchRequest):
+    _, tokens = tokenize_text(req.query)
+    query_embedding = get_embedding(tokens)
+
+    try:
+        response = supabase_client.rpc("match_documents", {
+            "query_embedding": query_embedding
+        }).execute()
+
+        return {"chunks" : response.data } # Return the data from the successful response
+    except Exception as e:
+        print(f"Failed to search: {e}")
+    
 
 class LoginRequest(BaseModel):
     email: str
