@@ -5,8 +5,19 @@ import { Toggle } from "@/components/ui/toggle";
 import { Bold, Italic, Strikethrough } from "lucide-react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { invoke } from "@tauri-apps/api/core";
+interface CreateDocumentResponse {
+    document_id: string;
+}
 
 export default () => {
+	// TODO: Get documentId and accessToken from the localstorage, and set documentId when initializing the document. Set accessToken in .env while we dont have a login page.
+	// const documentId = localStorage.getItem("documentId");
+	// const accessToken = localStorage.getItem("accessToken");
+	const documentId = undefined;
+	const accessToken = undefined;
+	if (documentId === undefined || accessToken === undefined) {
+		console.error("Set documentId and accessToken as hardcoded values in Tiptap.tsx");
+	}
 	const editor = useEditor({
 		extensions: [
 			StarterKit,
@@ -22,8 +33,8 @@ export default () => {
 		},
 		content: ``,
 		onUpdate({ editor }) {
-			const content = editor.getHTML();
-			invoke("save", { content });
+			const content = editor.getText();
+			invoke("save", { content, documentId, accessToken });
 		},
 	});
 
