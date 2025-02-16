@@ -31,6 +31,41 @@ app = FastAPI()
 app.mount("/secure", secure_app)
 app.mount("/public", public_app)
 
+
+class SummarizeRequest(BaseModel):
+    chunks: List[str]
+    name: str = "Summary"
+
+@secure_app.post("/summarize")
+async def summarize(req: SummarizeRequest, request: Request):
+    if not hasattr(request.state, 'user_id'):
+        return Response("User not authenticated", status_code=401)
+
+    chunks_text = "\n\n".join([f"Chunk {i+1}:\n{chunk}" for i, chunk in enumerate(req.chunks)])
+    
+    response = openai_client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a helpful assistant that combines text chunks into coherent notes. Maintain key information while ensuring smooth transitions and logical flow. Remove redundancies and organize the information clearly."
+            },
+            {
+                "role": "user",
+                "content": f"Please combine these text chunks into a single coherent note:\n\n{chunks_text}"
+            }
+        ],
+        temperature=0.2,
+        max_tokens=1500
+    )
+    
+    summary = response.choices[0].message.content
+    
+    
+    return {
+        "summary": summary,
+        "name": req.name
+    }
 def get_embedding(chunk_tokens: List[int]):
     try:
         response = openai_client.embeddings.create(input=chunk_tokens,
