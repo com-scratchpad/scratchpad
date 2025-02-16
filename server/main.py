@@ -37,10 +37,7 @@ class SummarizeRequest(BaseModel):
     name: str = "Summary"
 
 @secure_app.post("/summarize")
-async def summarize(req: SummarizeRequest, request: Request):
-    if not hasattr(request.state, 'user_id'):
-        return Response("User not authenticated", status_code=401)
-
+async def summarize(req: SummarizeRequest):
     chunks_text = "\n\n".join([f"Chunk {i+1}:\n{chunk}" for i, chunk in enumerate(req.chunks)])
     
     response = openai_client.chat.completions.create(
@@ -66,6 +63,8 @@ async def summarize(req: SummarizeRequest, request: Request):
         "summary": summary,
         "name": req.name
     }
+
+
 def get_embedding(chunk_tokens: List[int]):
     try:
         response = openai_client.embeddings.create(input=chunk_tokens,
@@ -109,9 +108,6 @@ class ItemCreate(BaseModel):
 
 @secure_app.post("/items/")
 async def create_item(item: ItemCreate, request: Request):
-    if not hasattr(request.state, 'user_id'):
-        return Response("User not authenticated", status_code=401)
-
     try:
         document = supabase_client.table("Documents").insert({
             "user_id": request.state.user_id,
