@@ -283,14 +283,13 @@ async def update_document(request: UpdateRequest):
     document_id = request.document_id
     chunks = chunk_text(request.file_content)
     saved_chunks = []
-
+    # First, delete existing chunks for the document
+    try:
+        supabase_client.table(CHUNKS_TABLE).delete().eq("document_id", document_id).execute()
+    except Exception as e:
+        print(f"Failed to delete existing chunks with exception: {e}")
+        return Response(f"Failed to delete existing chunks with exception: {e}", status_code=500)
     for idx, chunk in enumerate(chunks):
-        # First, delete existing chunks for the document
-        try:
-            supabase_client.table(CHUNKS_TABLE).delete().eq("document_id", document_id).execute()
-        except Exception as e:
-            print(f"Failed to delete existing chunks with exception: {e}")
-            return Response(f"Failed to delete existing chunks with exception: {e}", status_code=500)
         
         # Then, insert new chunks
         chunk_data = {
