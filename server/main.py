@@ -92,8 +92,6 @@ async def create_item(item: ItemCreate, request: Request):
     document_id = document.data[0]["id"]
     chunks = chunk_text(item.file_content)
     saved_chunks = []
-    
-    print(chunks)
 
     for idx, chunk in enumerate(chunks):
         chunk_data = {
@@ -119,24 +117,54 @@ async def create_item(item: ItemCreate, request: Request):
         "chunks": saved_chunks
     }
 
+
 class SearchRequest(BaseModel):
     query: str
     matches: int = 5
 
 
 @secure_app.post("/search")
-async def search(req: SearchRequest):
-    _, tokens = tokenize_text(req.query)
+async def search(search: SearchRequest, request: Request):
+    _, tokens = tokenize_text(search.query)
     query_embedding = get_embedding(tokens)
 
     try:
         response = supabase_client.rpc("match_documents", {
-            "query_embedding": query_embedding
+            "p_query_embedding": query_embedding,
+            "p_user_id": request.state.user_id
+        }).execute()
+        return {"chunks" : response.data } # Return the data from the successful response
+    except Exception as e:
+        print(f"Failed to search: {e}")
+
+
+class SearchFriendsRequest(BaseModel):
+    query: str
+    friend_id: str
+    matches: int = 5
+
+
+@secure_app.post("/search_friends")
+async def search_friends(search: SearchFriendsRequest, request: Request):
+    _, tokens = tokenize_text(search.query)
+    query_embedding = get_embedding(tokens)
+
+    try:
+        are_friends = supabase_client.rpc("are_friends", {
+            "p_user_id": request.state.user_id,
+            "p_friend_id": search.friend_id
+        }).execute()
+        if not bool(are_friends.data):
+            return Response(status_code=404)
+
+        response = supabase_client.rpc("match_documents", {
+            "p_query_embedding": query_embedding,
+            "p_user_id": search.friend_id
         }).execute()
 
         return {"chunks" : response.data } # Return the data from the successful response
     except Exception as e:
-        print(f"Failed to search: {e}")
+        print(f"Failed request with: {e}")
     
 
 class LoginRequest(BaseModel):
@@ -154,6 +182,25 @@ async def login(req: LoginRequest):
         print(resp.user.id)
     if resp.session is not None:
         return resp.session.access_token
+    return Response(status_code=401)
+
+
+class AddFriendRequest(BaseModel):
+    user_id: str
+
+
+@secure_app.post("/friend")
+async def insert_friend(friend: AddFriendRequest, request: Request):
+    try:
+        response = supabase_client.table("Friends").upsert({
+            "id": request.state.user_id,
+            "friend_id": friend.user_id
+        }).execute()
+
+        return {"chunks" : response.data } # Return the data from the successful response
+    except Exception as e:
+        print(f"Failed request with: {e}")
+    
     return Response(status_code=401)
 
 
