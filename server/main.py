@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 import tiktoken
 from typing import Dict
+from fastapi.middleware.cors import CORSMiddleware
 
 
 load_dotenv()
@@ -28,6 +29,25 @@ secure_app = FastAPI(openapi_prefix="/secure")
 public_app = FastAPI(openapi_prefix="/public")
 
 app = FastAPI()
+
+# Add CORS to main app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:1420"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+
+# Add CORS to secure_app
+secure_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:1420"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+
 app.mount("/secure", secure_app)
 app.mount("/public", public_app)
 
