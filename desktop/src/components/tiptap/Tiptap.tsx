@@ -7,13 +7,40 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { invoke } from "@tauri-apps/api/core";
 import { useState, useEffect } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useSidebar } from "@/components/ui/sidebar";  
+import { useSidebar } from "@/components/ui/sidebar";
 
-const Tiptap = () => {
+export default () => {
     const { setOpenMobile, setOpen } = useSidebar();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [currentSummary, setCurrentSummary] = useState("");
+
+    const documentId = undefined;
+    const accessToken = undefined;
+    
+    if (documentId === undefined || accessToken === undefined) {
+        console.error("Set documentId and accessToken as hardcoded values in Tiptap.tsx");
+    }
+
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Placeholder.configure({
+                placeholder: "Write something…",
+            }),
+        ],
+        autofocus: true,
+        editorProps: {
+            attributes: {
+                class: "flex-1 h-full overscroll-auto",
+            },
+        },
+        content: ``,
+        onUpdate({ editor }) {
+            const content = editor.getText();
+            invoke("save", { content, documentId, accessToken });
+        },
+    });
 
     const handleSearch = async (value: string) => {
         setSearchTerm(value);
@@ -66,25 +93,6 @@ const Tiptap = () => {
         if (savedSearch) setSearchTerm(savedSearch);
     }, []);
 
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Placeholder.configure({
-                placeholder: "Write something…",
-            }),
-        ],
-        autofocus: true,
-        editorProps: {
-            attributes: {
-                class: "flex-1 h-full overscroll-auto",
-            },
-        },
-        content: ``,
-        onUpdate({ editor }) {
-            const content = editor.getHTML();
-            invoke("save", { content });
-        },
-    });
 
     const handleContainerClick = (e: React.MouseEvent) => {
         // Only handle clicks directly on the container
@@ -170,4 +178,4 @@ const Tiptap = () => {
     );
 };
 
-export default Tiptap;
+
