@@ -1,28 +1,13 @@
-from typing import List, Optional
+import tiktoken
+
+from typing import Dict, List, Optional
 from pydantic import BaseModel
 from fastapi import FastAPI, Request, Response
-from supabase import create_client, Client
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
-import tiktoken
-from typing import Dict
 
+from .deps import create_openai_client, create_supabase_client
 
-load_dotenv()
-
-url = os.getenv("SUPABASE_URL")
-assert url is not None
-key = os.getenv("SUPABASE_KEY")
-assert key is not None
-
-supabase_client: Client = create_client(url, key)
-
-openai_key = os.getenv("OPENAI_API_KEY")
-assert openai_key is not None
-
-openai_client = OpenAI(
-    api_key=openai_key)
+openai_client = create_openai_client()
+supabase_client = create_supabase_client()
 
 secure_app = FastAPI(openapi_prefix="/secure")
 public_app = FastAPI(openapi_prefix="/public")
