@@ -1,8 +1,12 @@
+from typing import List, Dict
+from fastapi import FastAPI, Request, Response
 import tiktoken
 
-from typing import Dict, List, Optional
-from pydantic import BaseModel
-from fastapi import FastAPI, Request, Response
+from app.models.auth import LoginRequest
+from app.models.document import CreateDocumentRequest, DeleteDocumentRequest, UpdateDocumentRequest
+from app.models.friend import AddFriendRequest
+from app.models.search import SearchFriendsRequest, SearchRequest
+from app.models.summarize import SummarizeRequest
 
 from .deps import create_openai_client, create_supabase_client
 
@@ -19,10 +23,6 @@ app.mount("/public", public_app)
 CHUNKS_TABLE = "Chunks"
 DOCUMENTS_TABLE = "Documents"
 
-
-class SummarizeRequest(BaseModel):
-    chunks: List[str]
-    name: str = "Summary"
 
 @secure_app.post("/summarize")
 async def summarize(req: SummarizeRequest):
@@ -83,14 +83,8 @@ def chunk_text(text: str, chunk_size: int = 256, overlap: int = 32) -> List[Dict
     return chunks
 
 
-class DocumentCreate(BaseModel):
-    name: str
-    file_content: str
-    embedding: Optional[List[float]] = None
-
-
 @secure_app.post("/document")
-async def create_document(document: DocumentCreate, request: Request):
+async def create_document(document: CreateDocumentRequest, request: Request):
     try:
         response = supabase_client.table(DOCUMENTS_TABLE).insert({
             "user_id": request.state.user_id,
@@ -139,10 +133,6 @@ async def create_document(document: DocumentCreate, request: Request):
     }
 
 
-class SearchRequest(BaseModel):
-    query: str
-    matches: int = 5
-
 
 @secure_app.post("/search")
 async def search(search: SearchRequest, request: Request):
@@ -157,12 +147,6 @@ async def search(search: SearchRequest, request: Request):
         return {"chunks" : response.data } # Return the data from the successful response
     except Exception as e:
         print(f"Failed to search: {e}")
-
-
-class SearchFriendsRequest(BaseModel):
-    query: str
-    friend_id: str
-    matches: int = 5
 
 
 @secure_app.post("/search_friends")
@@ -188,11 +172,6 @@ async def search_friends(search: SearchFriendsRequest, request: Request):
         print(f"Failed request with: {e}")
     
 
-class LoginRequest(BaseModel):
-    email: str
-    password: str
-
-
 @public_app.post("/login")
 async def login(req: LoginRequest):
     resp = supabase_client.auth.sign_in_with_password({
@@ -204,10 +183,6 @@ async def login(req: LoginRequest):
     if resp.session is not None:
         return resp.session.access_token
     return Response(status_code=401)
-
-
-class AddFriendRequest(BaseModel):
-    user_id: str
 
 
 @secure_app.post("/friend")
@@ -245,11 +220,8 @@ async def add_authentication(request: Request, call_next):
     return await call_next(request)
 
 
-class DeleteRequest(BaseModel):
-    document_id: str
-
 @secure_app.delete("/document")
-async def delete_document(request: DeleteRequest):
+async def delete_document(request: DeleteDocumentRequest):
     document_id = request.document_id
     try:
         supabase_client.table(DOCUMENTS_TABLE).delete().eq("id", document_id).execute()
@@ -258,16 +230,13 @@ async def delete_document(request: DeleteRequest):
     except Exception as e:
         print(f"Failed to delete document with exception: {e}")
 
-class UpdateRequest(BaseModel):
-    document_id: str
-    file_content: str
+
 @secure_app.patch("/document")
-async def update_document(request: UpdateRequest):
+async def update_document(request: UpdateDocumentRequest):
     if request.file_content.strip() == "":
         return Response("Received empty file content, skipping chunk deletion", status_code=200)
     document_id = request.document_id
     chunks = chunk_text(request.file_content)
-    saved_chunks = []
     # First, delete existing chunks for the document
     try:
         supabase_client.table(CHUNKS_TABLE).delete().eq("document_id", document_id).execute()
@@ -285,7 +254,7 @@ async def update_document(request: UpdateRequest):
         }
 
         try:
-            response = supabase_client.table(CHUNKS_TABLE).insert(chunk_data).execute()
+            _ = supabase_client.table(CHUNKS_TABLE).insert(chunk_data).execute()
         except Exception as e:
             print(f"Failed to save chunk with exception: {e}") 
             return Response(f"Failed to save chunk with exception: {e}", status_code=500)
