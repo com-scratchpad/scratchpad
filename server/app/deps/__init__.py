@@ -9,6 +9,8 @@ from supabase import create_client, Client
 load_dotenv()
 
 
+# Create supabase client connection. Expects `SUPABASE_URL` and `SUPABASE_KEY`
+# env variable
 def create_supabase_client() -> Client:
     url = os.getenv("SUPABASE_URL")
     assert url is not None
@@ -18,6 +20,7 @@ def create_supabase_client() -> Client:
     return create_client(url, key)
 
 
+# Create openai client connection. Expects `OPENAI_API_KEY` env variable
 def create_openai_client() -> OpenAI:
     openai_key = os.getenv("OPENAI_API_KEY")
     assert openai_key is not None

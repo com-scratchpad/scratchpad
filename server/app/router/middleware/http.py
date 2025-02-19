@@ -1,13 +1,15 @@
 from fastapi import Request, Response
-from app.router.dependencies import get_dependencies
+from app.router.dependencies import get_router_deps
 
 
+# Auth middleware queries supabase auth for the user before passing the request
+# to the next handler
 class AuthMiddleware:
     def __init__(self):
         pass
 
     async def __call__(self, request: Request,  call_next):
-        get_dependencies(request)
+        get_router_deps(request)
         supabase_client = request.state.supabase
         if request.method == "OPTIONS":
             return await call_next(request)
