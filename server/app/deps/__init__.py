@@ -1,14 +1,13 @@
+import os
+
 from dotenv import load_dotenv
 from openai import OpenAI
+from supabase import create_client, Client
 
 # Simply load dotenv so that env variables are 
 # accessible in modules
 load_dotenv()
 
-# Manages supabase client connections
-import os
-
-from supabase import create_client, Client
 
 def create_supabase_client() -> Client:
     url = os.getenv("SUPABASE_URL")
