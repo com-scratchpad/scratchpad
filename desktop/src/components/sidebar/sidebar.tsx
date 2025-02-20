@@ -70,7 +70,7 @@ const data = {
 		},
 		{
 			title: "User Settings",
-			url: "UserSettings",	// change routing later
+			url: "#",	// change routing later
 			icon: SettingsIcon,
 		},
 	],
