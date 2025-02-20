@@ -2,6 +2,7 @@ from fastapi import Request, Response
 
 from app.common.text import chunk_text
 from app.models.document import CreateDocumentRequest, DeleteDocumentRequest, UpdateDocumentRequest
+from app.logging import logger
 
 CHUNKS_TABLE = "Chunks"
 DOCUMENTS_TABLE = "Documents"
@@ -15,7 +16,7 @@ async def create_document(document: CreateDocumentRequest, request: Request):
             "name": document.name,
         }).execute()
     except Exception as e:
-        print(f"Failed to save chunk with exception: {e}") 
+        logger.e(f"Failed to save chunk with exception: {e}") 
         return {
                 "message": f"Failed to save chunk with exception: {e}"
         }
@@ -45,7 +46,7 @@ async def create_document(document: CreateDocumentRequest, request: Request):
             if response.data:
                 saved_chunks.append(response.data[0])
         except Exception as e:
-            print(f"Failed to save chunk with exception: {e}") 
+            logger.e(f"Failed to save chunk with exception: {e}") 
             return {
                     "message": f"Failed to save chunk with exception: {e}"
             }
@@ -65,7 +66,7 @@ async def delete_document(delete: DeleteDocumentRequest, request: Request):
         supabase_client.table(CHUNKS_TABLE).delete().eq("document_id", document_id).execute()
         return Response("Document deleted successfully", status_code=200)
     except Exception as e:
-        print(f"Failed to delete document with exception: {e}")
+        logger.e(f"Failed to delete document with exception: {e}")
 
 
 async def update_document(update: UpdateDocumentRequest, request: Request):
@@ -78,7 +79,7 @@ async def update_document(update: UpdateDocumentRequest, request: Request):
     try:
         supabase_client.table(CHUNKS_TABLE).delete().eq("document_id", document_id).execute()
     except Exception as e:
-        print(f"Failed to delete existing chunks with exception: {e}")
+        logger.e(f"Failed to delete existing chunks with exception: {e}")
         return Response(f"Failed to delete existing chunks with exception: {e}", status_code=500)
     for idx, chunk in enumerate(chunks):
         
@@ -93,7 +94,7 @@ async def update_document(update: UpdateDocumentRequest, request: Request):
         try:
             _ = supabase_client.table(CHUNKS_TABLE).insert(chunk_data).execute()
         except Exception as e:
-            print(f"Failed to save chunk with exception: {e}") 
+            logger.e(f"Failed to save chunk with exception: {e}") 
             return Response(f"Failed to save chunk with exception: {e}", status_code=500)
           
     return Response("Document updated successfully", status_code=200)

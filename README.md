@@ -27,4 +27,4 @@ Running backend
 Go into directory `scratchpad/server`, then run `uv run fastapi dev`
 ##
       cd <scratchpad directory>/server
-      uv run fastapi dev
+      uvicorn app.main:app --reload

@@ -1,6 +1,7 @@
 import tiktoken
 
 from typing import List, Dict
+from app.logging import logger
 
 
 # Retrieve an embedding from tokenized chunk of text
@@ -10,7 +11,7 @@ def get_embedding(openai_client, chunk_tokens: List[int]):
                                                    model="text-embedding-ada-002") 
         return response.data[0].embedding  # Access the embedding
     except Exception as e:
-        print(f"Error occurred when retrieving embedding: {e}")
+        logger.e(f"Error occurred when retrieving embedding: {e}")
 
 
 # Use tiktoken encoding to tokenize a text block

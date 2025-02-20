@@ -2,6 +2,7 @@ from fastapi import Request, Response
 
 from app.common.text import get_embedding, tokenize_text
 from app.models.search import SearchFriendsRequest, SearchRequest
+from app.logging import logger
 
 
 async def search(search: SearchRequest, request: Request):
@@ -15,7 +16,7 @@ async def search(search: SearchRequest, request: Request):
         }).execute()
         return {"chunks" : response.data } # Return the data from the successful response
     except Exception as e:
-        print(f"Failed to search: {e}")
+        logger.e(f"Failed to search: {e}")
 
 
 async def search_friends(search: SearchFriendsRequest, request: Request):
@@ -37,7 +38,7 @@ async def search_friends(search: SearchFriendsRequest, request: Request):
 
         return {"chunks" : response.data } # Return the data from the successful response
     except Exception as e:
-        print(f"Failed request with: {e}")
+        logger.e(f"Failed request with: {e}")
     
 
 
