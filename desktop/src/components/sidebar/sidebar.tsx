@@ -9,6 +9,7 @@ import {
 	MessageCircleQuestion,
 	Search,
 	Settings2,
+	SettingsIcon,
 	Sparkles,
 	Trash2,
 } from "lucide-react";
@@ -66,6 +67,11 @@ const data = {
 			url: "#",
 			icon: Inbox,
 			badge: "10",
+		},
+		{
+			title: "User Settings",
+			url: "UserSettings",	// change routing later
+			icon: SettingsIcon,
 		},
 	],
 	navSecondary: [
