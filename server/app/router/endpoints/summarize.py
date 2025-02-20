@@ -1,7 +1,8 @@
 from app.models.summarize import SummarizeRequest
+from fastapi import Request, Response
 
 
-async def summarize(summarize: SummarizeRequest, request):
+async def summarize(summarize: SummarizeRequest, request: Request):
     chunks_text = "\n\n".join([f"Chunk {i+1}:\n{chunk}" for i, chunk in
                                enumerate(summarize.chunks)])
     openai_client = request.state.openai

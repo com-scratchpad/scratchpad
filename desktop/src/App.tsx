@@ -3,23 +3,15 @@ import Tiptap from "@/components/tiptap/Tiptap";
 import { CommandDialogDemo } from "@/components/command/command";
 import { AppSidebar } from "@/components/sidebar/sidebar";
 import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import {
 	SidebarInset,
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, MoreVertical, Settings } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
+import { SearchBar } from "@/components/search/SearchBar";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +35,7 @@ function App() {
 				>
 					<SidebarTrigger size={"icon_sm"} className="-ml-1 transition-all" />
 					<div className="flex-1"></div>
+					<SearchBar />
 					<Button size={"icon_sm"} variant={"ghost"}>
 						<MoreHorizontal />
 					</Button>
