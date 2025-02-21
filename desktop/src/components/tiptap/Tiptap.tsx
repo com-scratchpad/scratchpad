@@ -12,10 +12,11 @@ interface CreateDocumentResponse {
 
 interface TiptapProps {
   initialContent?: string;
+  updateContent?: CallableFunction;
   placeholder?: string;
 }
 
-export default ({ initialContent = '', placeholder = 'Write something...' }: TiptapProps) => {
+export default (props: TiptapProps) => {
   const documentId = undefined;
   const accessToken = undefined;
 
@@ -23,7 +24,7 @@ export default ({ initialContent = '', placeholder = 'Write something...' }: Tip
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: placeholder,
+        placeholder: props.placeholder,
       }),
     ],
     autofocus: true,
@@ -32,19 +33,20 @@ export default ({ initialContent = '', placeholder = 'Write something...' }: Tip
         class: "flex-1 h-full overscroll-auto",
       },
     },
-    content: initialContent || '', // Ensure content is properly initialized
+    content: props.initialContent || '', // Ensure content is properly initialized
     onUpdate({ editor }) {
       const content = editor.getText();
-      invoke("save", { content, documentId, accessToken });
+      if(props.updateContent)
+        props.updateContent(content);
     },
   });
 
   // Update content when initialContent prop changes
   useEffect(() => {
-    if (editor && initialContent) {
-      editor.commands.setContent(initialContent);
+    if (editor && props.initialContent) {
+      editor.commands.setContent(props.initialContent);
     }
-  }, [editor, initialContent]);
+  }, [editor, props.initialContent]);
 
 	const handleContainerClick = () => {
 		if (editor && !editor.isFocused) {
