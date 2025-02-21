@@ -1,5 +1,6 @@
 from fastapi import Depends, FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.router.dependencies import get_router_deps
 from app.router.endpoints.document import create_document, delete_document, update_document
@@ -15,8 +16,10 @@ from app.router.middleware.http import AuthMiddleware
 def init_router():
     secure_app = FastAPI(dependencies=[Depends(get_router_deps)],
                          root_path="/secure")
+    
     auth_middleware = AuthMiddleware()
     secure_app.add_middleware(BaseHTTPMiddleware, dispatch=auth_middleware)
+    
     secure_app.add_api_route("/document", create_document, methods=["POST"])
     secure_app.add_api_route("/document", delete_document, methods=["DELETE"])
     secure_app.add_api_route("/document", update_document, methods=["PATCH"])
@@ -29,6 +32,16 @@ def init_router():
     public_app.add_api_route("/login", login, methods=["POST"])
 
     router = FastAPI(dependencies=[Depends(get_router_deps)])
+    
+    # Add CORS to main router 
+    router.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    
     router.mount("/secure", secure_app)
     router.mount("/public", public_app)
 
