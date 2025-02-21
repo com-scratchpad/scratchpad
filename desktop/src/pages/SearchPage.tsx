@@ -53,7 +53,6 @@ export function SearchPage() {
             </Button>
             <div className="flex items-center gap-2">
               <SearchBar />
-              <SaveButton />
               <PlugButton />
             </div>
           </div>
