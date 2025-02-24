@@ -24,6 +24,9 @@ import {
 	SidebarHeader,
 	SidebarRail,
 } from "@/components/ui/sidebar";
+import { SearchBar } from "@/components/search/SearchBar";
+import { PlugButton } from "@/components/plug/PlugButton";
+import { SaveButton } from "../save/SaveButton";
 
 // This is sample data.
 const data = {
@@ -257,19 +260,16 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-	return (
-		<Sidebar className="border-r-0" {...props}>
-			<SidebarHeader className="pt-9">
-				<NavMain items={data.navMain} />
-			</SidebarHeader>
-			{/*
-			<SidebarContent>
-				<NavFavorites favorites={data.favorites} />
-				<NavWorkspaces workspaces={data.workspaces} />
-				<NavSecondary items={data.navSecondary} className="mt-auto" />
-			</SidebarContent>
-      */}
-			<SidebarRail />
-		</Sidebar>
-	);
+  return (
+    <Sidebar className="border-r-0" {...props}>
+      <SidebarHeader className="pt-9">
+        <div className="pl-8 pr-2 mb-4 flex justify-end gap-2">
+          <SearchBar alwaysOpen={true} />
+          <SaveButton title="Summary" content="" />
+        </div>
+        <NavMain items={data.navMain} />
+      </SidebarHeader>
+      <SidebarRail />
+    </Sidebar>
+  );
 }

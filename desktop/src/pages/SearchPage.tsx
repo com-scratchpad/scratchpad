@@ -4,15 +4,23 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Tiptap from "@/components/tiptap/Tiptap";
 import { SearchBar } from "@/components/search/SearchBar";
-import { SaveButton } from "@/components/save/SaveButton";
 import { PlugButton } from "@/components/plug/PlugButton";
+import { ChunkList } from "@/components/chunks/ChunkList";
+import { AppSidebar } from "@/components/sidebar/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import clsx from "clsx";
+import { SaveButton } from '@/components/save/SaveButton';
 
 export function SearchPage() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q');
   const [results, setResults] = useState([]);
   const [summary, setSummary] = useState("");
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     const storedResults = localStorage.getItem('searchResults');
@@ -27,48 +35,47 @@ export function SearchPage() {
   }, [query]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)]">
-      <div className="flex p-4 gap-4 flex-1">
-        {isMenuOpen && (
-          <div className="w-1/4 overflow-y-auto border-r pr-4">
-            <h2 className="text-base font-semibold mb-4 text-center">Search Results</h2>
-            <div className="space-y-4">
-              {results.map((result: any) => (
-                <div key={result.id} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                  <p className="text-sm">{result.content}</p>
-                </div>
-              ))}
+    <SidebarProvider
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      style={{
+        "--sidebar-width": "19rem",
+      } as React.CSSProperties}
+    >
+      <AppSidebar />
+      <SidebarInset>
+        <header
+          className={clsx("flex h-10 shrink-0 ml-16 items-center gap-2 px-3", {
+            "-ml-1": isOpen,
+          })}
+        >
+          <SidebarTrigger size="icon_sm" className="-ml-1 transition-all" />
+          <div className="flex-1" />
+          <div className="flex items-center gap-2">
+            <SaveButton title= "Summary" content = ""/>
+            <PlugButton />
+          </div>
+        </header>
+
+        <div className="flex h-[calc(100%-2.5rem)]">
+          <div className="w-[400px] border-r">
+            <ChunkList chunks={results} />
+          </div>
+          
+          <div className="flex-1 p-4">
+            <div className="text-center mb-4">
+              <h1 className="text-2xl font-bold">Summary</h1>
             </div>
-          </div>
-        )}
 
-        <div className="flex-1 max-w-3xl mx-auto relative">
-          <div className="flex items-center justify-between mb-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <SearchBar />
-              <PlugButton />
+            <div className="mt-2">
+              <Tiptap 
+                initialContent={summary} 
+                placeholder="Edit your summary..."
+              />
             </div>
-          </div>
-
-          <div className="text-center mb-4">
-            <h1 className="text-2xl font-bold">Summary</h1>
-          </div>
-
-          <div className="mt-2">
-            <Tiptap 
-              initialContent={summary} 
-              placeholder="Edit your summary..."
-            />
           </div>
         </div>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

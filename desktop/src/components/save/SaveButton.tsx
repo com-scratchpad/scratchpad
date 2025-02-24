@@ -36,7 +36,6 @@ export function SaveButton(props: SaveButtonProps) {
       <Button 
         size={"icon_sm"} 
         variant={"ghost"}
-        className="h-6 w-8 min-w-8"
         onClick={handleSave}
       >
         <Save className="h-4 w-4" />

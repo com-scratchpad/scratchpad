@@ -13,6 +13,7 @@ import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { SearchBar } from "@/components/search/SearchBar";
 import { SaveButton } from "./components/save/SaveButton";
+import { SearchButton } from "./components/search/SearchButton";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +41,7 @@ function App() {
 				>
 					<SidebarTrigger size={"icon_sm"} className="-ml-1 transition-all" />
 					<div className="flex-1"></div>
-					<SearchBar />
+					<SearchButton navigateOnly = {true}/>
 					<SaveButton title="Document 1" content={content}/>
 					<Button size={"icon_sm"} variant={"ghost"}>
 						<MoreHorizontal />
