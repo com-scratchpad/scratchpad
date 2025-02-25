@@ -7,10 +7,11 @@ async def login(login: LoginRequest, request: Request):
         "email": login.email,
         "password": login.password,
     })
+    print(resp)
     if resp.session is not None:
         return {
             "user": resp.user,
-            "access_token": resp.session.access_token,
+            "token": resp.session.access_token,
         }
 
     return Response(status_code=401)

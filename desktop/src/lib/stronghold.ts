@@ -1,7 +1,8 @@
 import { Store } from "@tauri-apps/plugin-store";
 import { appDataDir } from "@tauri-apps/api/path";
 
-const TOKEN_KEY = "auth_token";
+const TOKEN_KEY = "token";
+const USER_KEY = "user";
 let store: Store;
 
 export const initStore = async () => {
@@ -9,10 +10,15 @@ export const initStore = async () => {
     store = await Store.load(storePath);
 };
 
-export const storeToken = async (token: string) => {
-    await store.set(TOKEN_KEY, token);
-    await store.save();
-};
+export const storeCredentials = async (data: any) => {
+    console.log(data)
+    if (data.token !== null) {
+        await store.set(TOKEN_KEY, data.token);
+    }
+    if (data.user !== null) {
+        await store.set(USER_KEY, data.user);
+    }
+}
 
 export const getToken = async (): Promise<string | null> => {
     try {
