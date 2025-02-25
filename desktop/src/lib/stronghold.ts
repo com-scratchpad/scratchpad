@@ -23,8 +23,10 @@ export const getToken = async (): Promise<string | null> => {
 	}
 };
 
-export const removeToken = async () => {
-	await store.delete(TOKEN_KEY);
-	await store.save();
-	console.log("Token removed successfully");
+export const clearToken = async (): Promise<boolean> => {
+	try {
+		return await store.delete(TOKEN_KEY);
+	} catch {
+        return false
+	}
 };

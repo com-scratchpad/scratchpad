@@ -8,5 +8,9 @@ async def login(login: LoginRequest, request: Request):
         "password": login.password,
     })
     if resp.session is not None:
-        return resp.session.access_token
+        return {
+            "user": resp.user,
+            "access_token": resp.session.access_token,
+        }
+
     return Response(status_code=401)
