@@ -126,7 +126,7 @@ export function SearchBar({ alwaysOpen = false, showToggle = true }: SearchBarPr
   return (
     <div className="flex items-center" ref={searchContainerRef}>
       <div className="flex-1 mr-1">
-        {(showSearch || alwaysOpen) && (
+        {(alwaysOpen) && (
           <Input
             placeholder="Search..."
             className="h-6 w-[200px] text-sm"
@@ -142,14 +142,10 @@ export function SearchBar({ alwaysOpen = false, showToggle = true }: SearchBarPr
         )}
       </div>
       <SearchButton 
-        onClick={() => {
-          if (showToggle) {
-            setShowSearch(!showSearch);
-          }
-          if (!showToggle || (showToggle && showSearch)) {
-            handleSearchSubmit();
-          }
-        }}
+        showToggle={showToggle}
+        onToggle={() => setShowSearch(!showSearch)}
+        onSearch={handleSearchSubmit}
+        navigateOnly={false}
       />
     </div>
   );

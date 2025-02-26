@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
-import { SearchBar } from "@/components/search/SearchBar";
 import { SaveButton } from "./components/save/SaveButton";
 import { SearchButton } from "./components/search/SearchButton";
 
