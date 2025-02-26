@@ -1,9 +1,9 @@
+use reqwest::Client;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
+use std::future::Future;
 use tauri::AppHandle;
 use tauri_plugin_store::StoreExt;
-use reqwest::Client;
-use serde::{Serialize, Deserialize};
-use std::future::Future;
 
 #[derive(Serialize)]
 struct UpdateRequest {
