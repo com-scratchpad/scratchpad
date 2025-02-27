@@ -1,5 +1,6 @@
 import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getToken } from "@/lib/stronghold";
 
 interface SaveButtonProps {
   title: string;
@@ -7,14 +8,16 @@ interface SaveButtonProps {
 };
 
 export function SaveButton(props: SaveButtonProps) {
-   
-  const handleSave = async () => {
+ const handleSave = async () => {
+    const tokenData = await getToken();
+    console.log("Token data: ", tokenData);
+    // const token = tokenData?.token;
     try {
       const response = await fetch('http://localhost:8000/secure/document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`,
+          'Authorization': `Bearer ${tokenData}`,
         },
         body: JSON.stringify({
           name: props.title,

@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { SearchButton } from "./SearchButton";
+import { getToken } from '@/lib/stronghold';
 
 interface SearchBarProps {
-  alwaysOpen?: boolean;
-  showToggle?: boolean;
+  alwaysOpen: boolean;
+  showToggle: boolean;
 }
 
-export function SearchBar({ alwaysOpen = false, showToggle = true }: SearchBarProps) {
+export function SearchBar({ alwaysOpen, showToggle }: SearchBarProps) {
   const [showSearch, setShowSearch] = useState(alwaysOpen);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -73,12 +74,12 @@ export function SearchBar({ alwaysOpen = false, showToggle = true }: SearchBarPr
   const handleSearchSubmit = async () => {
     if (searchQuery.trim()) {
       try {
-        localStorage.setItem("searchTerm", searchQuery);
+        const token = await getToken();
         const response = await fetch('http://localhost:8000/secure/search', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`,
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({
             query: searchQuery, 
@@ -97,7 +98,7 @@ export function SearchBar({ alwaysOpen = false, showToggle = true }: SearchBarPr
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`,
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
               'chunks': textContents,

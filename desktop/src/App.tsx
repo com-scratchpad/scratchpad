@@ -40,7 +40,10 @@ function App() {
 				>
 					<SidebarTrigger size={"icon_sm"} className="-ml-1 transition-all" />
 					<div className="flex-1"></div>
-					<SearchButton navigateOnly = {true}/>
+                    <SearchButton 
+                        navigateOnly={true}
+                        showToggle={false}
+                    />
 					<SaveButton title="Document 1" content={content}/>
 					<Button size={"icon_sm"} variant={"ghost"}>
 						<MoreHorizontal />

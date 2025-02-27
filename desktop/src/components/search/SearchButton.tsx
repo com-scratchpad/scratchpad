@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 interface SearchButtonProps {
   onSearch?: () => void;
   onToggle?: () => void;
-  showToggle?: boolean;
-  navigateOnly?: boolean;
+  showToggle: boolean;
+  navigateOnly: boolean;
 }
 
-export function SearchButton({ onSearch, onToggle, showToggle = false, navigateOnly = false }: SearchButtonProps) {
+export function SearchButton({ onSearch, onToggle, showToggle, navigateOnly }: SearchButtonProps) {
   const navigate = useNavigate();
 
   const handleClick = () => {
