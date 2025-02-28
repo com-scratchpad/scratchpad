@@ -3,6 +3,7 @@ import { appDataDir } from "@tauri-apps/api/path";
 
 const TOKEN_KEY = "token";
 const USER_KEY = "user";
+const USER_ID_KEY = "user_id";
 let store: Store;
 
 export const initStore = async () => {
@@ -17,6 +18,9 @@ export const storeCredentials = async (data: any) => {
     }
     if (data.user !== null) {
         await store.set(USER_KEY, data.user);
+    }
+    if (data.user !== null && data.user.id !== null) {
+        await store.set(USER_ID_KEY, data.user.id);
     }
 }
 
@@ -36,3 +40,12 @@ export const clearToken = async (): Promise<boolean> => {
         return false
     }
 };
+
+export const getUserId = async(): Promise<string | null> => {
+    try {
+        const token = await store.get<string>(USER_ID_KEY);
+        return token || null;
+    } catch {
+        return null;
+    }
+}

@@ -1,7 +1,7 @@
 from fastapi import Request, Response
 
 from app.common.text import chunk_text
-from app.models.document import CreateDocumentRequest, DeleteDocumentRequest, UpdateDocumentRequest
+from app.models.document import CreateDocumentRequest, DeleteDocumentRequest, GatherDocumentsRequest, UpdateDocumentRequest
 from app.logging import logger
 
 CHUNKS_TABLE = "Chunks"
@@ -98,3 +98,18 @@ async def update_document(update: UpdateDocumentRequest, request: Request):
             return Response(f"Failed to save chunk with exception: {e}", status_code=500)
           
     return Response("Document updated successfully", status_code=200)
+
+
+async def gather_documents(gather: GatherDocumentsRequest, request: Request):
+    user_id = gather.user_id
+    supabase_client = request.state.supabase
+    try:
+        response = supabase_client.table(DOCUMENTS_TABLE).select().eq("user_id",
+                                                                      user_id).execute()
+    except Exception as e:
+        logger.e(f"Failed to gather documents for user %s with exception: {e}" %
+                 user_id)
+        return Response(f"Failed to gather documents with exception: {e}",
+                        status_code=500)
+    return {"documents": response.data}
+

@@ -18,3 +18,8 @@ class DeleteDocumentRequest(BaseModel):
 class UpdateDocumentRequest(BaseModel):
     document_id: str
     file_content: str
+
+
+# Gather all documents for a user
+class GatherDocumentsRequest(BaseModel):
+    user_id: str
