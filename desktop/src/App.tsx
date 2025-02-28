@@ -13,6 +13,7 @@ import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { SaveButton } from "./components/save/SaveButton";
 import { SearchButton } from "./components/search/SearchButton";
+import { ModeToggle } from "./providers/theme/toggle";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -44,6 +45,7 @@ function App() {
                         navigateOnly={true}
                         showToggle={false}
                     />
+          <ModeToggle />
 					<SaveButton title="Document 1" content={content}/>
 					<Button size={"icon_sm"} variant={"ghost"}>
 						<MoreHorizontal />
