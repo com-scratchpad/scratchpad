@@ -37,7 +37,7 @@ export function LoginForm({
 			}
 
 			const data = await response.json();
-			const token = data; // Ensure API returns { token: "JWT_TOKEN" }
+			const token = data.access_token; // Ensure API returns { token: "JWT_TOKEN" }
 
 			if (!token) throw new Error("No token received");
 
