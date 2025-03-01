@@ -268,28 +268,39 @@ const Sidebar = React.forwardRef<
 Sidebar.displayName = "Sidebar";
 
 const SidebarTrigger = React.forwardRef<
-	React.ElementRef<typeof Button>,
-	React.ComponentProps<typeof Button>
+  React.ElementRef<typeof Button>,
+  React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-	const { toggleSidebar } = useSidebar();
-
-	return (
-		<Button
-			ref={ref}
-			data-sidebar="trigger"
-			variant="ghost"
-			size="icon_sm"
-			className={cn("h-7 w-7", className)}
-			onClick={(event) => {
-				onClick?.(event);
-				toggleSidebar();
-			}}
-			{...props}
-		>
-			<Menu className="stroke-zinc-800" />
-			<span className="sr-only">Toggle Sidebar</span>
-		</Button>
-	);
+  const { open, toggleSidebar } = useSidebar();
+  const [isMacOS, setIsMacOS] = React.useState(false);
+  
+  React.useEffect(() => {
+    setIsMacOS(navigator.platform.toLowerCase().includes('mac'));
+  }, []);
+  
+  return (
+    <Button
+      ref={ref}
+      data-sidebar="trigger"
+      variant="ghost"
+      size="icon_sm"
+      className={cn(
+        "absolute top-1.5 left-2 z-50", 
+        "h-7 w-7 min-w-7",
+        "transition-all duration-250 ease-in-out",
+        isMacOS && !open ? "left-18" : "left-66",
+        className
+      )}
+      onClick={(event) => {
+        onClick?.(event);
+        toggleSidebar();
+      }}
+      {...props}
+    >
+      <Menu className="stroke-zinc-800" />
+      <span className="sr-only">Toggle Sidebar</span>
+    </Button>
+  );
 });
 SidebarTrigger.displayName = "SidebarTrigger";
 

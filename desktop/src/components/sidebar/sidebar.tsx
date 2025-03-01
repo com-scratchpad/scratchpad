@@ -23,7 +23,6 @@ import {
 
 
 import SignOutButton from "./signout";
-import { SearchBar } from "../search/SearchBar";
 import { SaveButton } from "../save/SaveButton";
 
 
@@ -263,7 +262,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <Sidebar className="border-r-0" {...props}>
             <SidebarHeader className="pt-9">
                 <div className="pl-8 pr-2 mb-4 flex justify-end gap-2">
-                    <SearchBar alwaysOpen={true} showToggle={false} />
                     <SaveButton title="Summary" content="" />
                 </div>
                 <NavMain items={data.navMain} />

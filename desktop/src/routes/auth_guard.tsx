@@ -5,8 +5,9 @@ import { getToken, initStore } from "@/lib/stronghold";
 const isAuthenticated = async () => {
 	try {
 		await initStore();
+    console.log("INITIALIZED STORE");
 		const token = await getToken();
-		console.log(token);
+		console.log("FOUND TOKEN: ", token);
 		return token !== null && token !== "";
 	} catch (error) {
 		console.error("Error reading token from Stronghold:", error);
