@@ -6,8 +6,10 @@ export default {
     	extend: {
         spacing: {
           '18': '4.5rem',
+          '26': '6.5rem',
           '66': '16.5rem',
           '68': '17rem',
+          '76': '18.5rem',
         },
     		borderRadius: {
     			lg: 'var(--radius)',
