@@ -6,6 +6,7 @@ from app.router.dependencies import get_router_deps
 from app.router.endpoints.document import create_document, delete_document, update_document
 from app.router.endpoints.friend import add_friend
 from app.router.endpoints.login import login
+from app.router.endpoints.register import register
 from app.router.endpoints.search import search, search_friends
 from app.router.endpoints.summarize import summarize
 from app.router.middleware.http import AuthMiddleware
@@ -30,6 +31,7 @@ def init_router():
 
     public_app = FastAPI(dependencies=[Depends(get_router_deps)], root_path="/public")
     public_app.add_api_route("/login", login, methods=["POST"])
+    public_app.add_api_route("/register", register, methods=["POST"])
 
     router = FastAPI(dependencies=[Depends(get_router_deps)])
     
