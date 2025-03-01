@@ -97,6 +97,9 @@ export function LoginForm({
 						<Button type="submit" className="w-full">
 							Login
 						</Button>
+						<Button onClick={() => navigate('/register')} type="submit" className="w-full">
+							Register
+						</Button>
 					</div>
 				</div>
 			</form>

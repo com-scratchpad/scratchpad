@@ -3,6 +3,7 @@ import App from "@/App";
 import { SearchPage } from "@/pages/SearchPage";
 import AuthGuard from "./auth_guard";
 import LoginPage from "./login";
+import RegisterPage from "./register";
 
 export const router = createBrowserRouter([
 	{
@@ -11,7 +12,7 @@ export const router = createBrowserRouter([
 	},
 	{
 		path: "/register",
-		element: <LoginPage/>,
+		element: <RegisterPage/>,
 	},
 	{
 		path: "/",
