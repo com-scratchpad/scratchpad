@@ -16,7 +16,7 @@ export default function SignOutButton() {
 
     return (
         <Button onClick={signOut}>
-            <span>SignOut</span>
+            <span>Sign Out</span>
         </Button>
     )
 }

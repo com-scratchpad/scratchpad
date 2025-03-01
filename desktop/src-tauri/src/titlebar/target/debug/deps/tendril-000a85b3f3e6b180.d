@@ -1,0 +1,11 @@
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/libtendril-000a85b3f3e6b180.rmeta: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/fmt.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/stream.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/buf32.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/tendril.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/utf8_decode.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/util.rs
+
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/tendril-000a85b3f3e6b180.d: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/fmt.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/stream.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/buf32.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/tendril.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/utf8_decode.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/util.rs
+
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/lib.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/fmt.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/stream.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/buf32.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/tendril.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/utf8_decode.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tendril-0.4.3/src/util.rs:

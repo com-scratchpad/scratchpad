@@ -1,0 +1,10 @@
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/libobjc2_encode-3e085c7c562d2f4c.rmeta: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/encoding.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/encoding_box.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/helper.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/parse.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/static_str.rs
+
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/objc2_encode-3e085c7c562d2f4c.d: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/encoding.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/encoding_box.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/helper.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/parse.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/static_str.rs
+
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/lib.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/encoding.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/encoding_box.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/helper.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/parse.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/objc2-encode-4.1.0/src/static_str.rs:

@@ -1,0 +1,11 @@
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/liblitemap-d2715d2d514f74d0.rmeta: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/map.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/mod.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/slice_impl.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/vec_impl.rs
+
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/liblitemap-d2715d2d514f74d0.rlib: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/map.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/mod.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/slice_impl.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/vec_impl.rs
+
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/litemap-d2715d2d514f74d0.d: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/map.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/mod.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/slice_impl.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/vec_impl.rs
+
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/lib.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/map.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/mod.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/slice_impl.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/litemap-0.7.5/src/store/vec_impl.rs:

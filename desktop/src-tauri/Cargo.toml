@@ -28,4 +28,5 @@ titlebar = { path = "src/titlebar" }
 tauri-plugin-store = "2"
 tauri-plugin-stronghold = "2"
 tauri-plugin-http = "2"
+tauri-plugin-fs = "2"
 

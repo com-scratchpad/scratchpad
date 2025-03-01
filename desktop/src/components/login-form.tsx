@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { initUserHome, loadDocuments, useDocumentStore } from "@/lib/files";
 
 export function LoginForm({
 	className,
@@ -16,6 +17,7 @@ export function LoginForm({
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
+    const setDocuments = useDocumentStore((state: any) => state.setDocuments)
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -37,6 +39,10 @@ export function LoginForm({
 			const data = await response.json();
 			if (!data) throw new Error("No data received");
             await storeCredentials(data);
+
+            await initUserHome();
+            const documents = await loadDocuments();
+            setDocuments(documents);
 
 			navigate("/");
 		} catch (err) {

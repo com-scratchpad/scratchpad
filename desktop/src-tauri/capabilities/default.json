@@ -38,6 +38,8 @@
           "url": "https://*:**"
         }
       ]
-    }
+    },
+    "fs:default",
+    "fs:allow-app-write-recursive"
   ]
 }

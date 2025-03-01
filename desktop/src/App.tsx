@@ -11,15 +11,16 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
-import { SearchBar } from "@/components/search/SearchBar";
 import { SaveButton } from "./components/save/SaveButton";
+import { ModeToggle } from "./providers/theme/toggle";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
     const [content, setContent] = useState("");
 
     // Update dependent component when content is changed
-    useEffect(() => {}, [content]);
+    useEffect(() => {
+    }, [content]);
 
 	return (
 		<SidebarProvider
@@ -40,7 +41,7 @@ function App() {
 				>
 					<SidebarTrigger size={"icon_sm"} className="-ml-1 transition-all" />
 					<div className="flex-1"></div>
-					<SearchBar />
+          <ModeToggle />
 					<SaveButton title="Document 1" content={content}/>
 					<Button size={"icon_sm"} variant={"ghost"}>
 						<MoreHorizontal />

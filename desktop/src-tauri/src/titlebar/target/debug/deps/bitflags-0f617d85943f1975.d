@@ -1,0 +1,12 @@
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/libbitflags-0f617d85943f1975.rmeta: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/iter.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/parser.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/traits.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/public.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/internal.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/external.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/external/serde.rs
+
+/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/bitflags-0f617d85943f1975.d: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/iter.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/parser.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/traits.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/public.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/internal.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/external.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/external/serde.rs
+
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/lib.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/iter.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/parser.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/traits.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/public.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/internal.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/external.rs:
+/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.9.0/src/external/serde.rs:

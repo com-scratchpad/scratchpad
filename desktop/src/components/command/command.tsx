@@ -19,9 +19,11 @@ import {
 	CommandSeparator,
 	CommandShortcut,
 } from "@/components/ui/command";
+import { useNavigate } from "react-router-dom";
 
 export function CommandDialogDemo() {
 	const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
 	React.useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -45,7 +47,11 @@ export function CommandDialogDemo() {
 				<CommandList>
 					<CommandEmpty>No results found.</CommandEmpty>
 					<CommandGroup heading="Suggestions">
-						<CommandItem>
+						<CommandItem
+              onSelect={() => {
+                navigate('/search') 
+              }}
+            >
 							<Search />
 							<span>Search Files</span>
 						</CommandItem>

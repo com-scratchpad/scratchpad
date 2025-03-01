@@ -4,11 +4,7 @@ import "./Tiptap.css";
 import { Toggle } from "@/components/ui/toggle";
 import { Bold, Italic, Strikethrough } from "lucide-react";
 import Placeholder from "@tiptap/extension-placeholder";
-import { invoke } from "@tauri-apps/api/core";
 import { useEffect } from "react";
-interface CreateDocumentResponse {
-    document_id: string;
-}
 
 interface TiptapProps {
   initialContent?: string;
@@ -17,9 +13,6 @@ interface TiptapProps {
 }
 
 export default (props: TiptapProps) => {
-  const documentId = undefined;
-  const accessToken = undefined;
-
   const editor = useEditor({
     extensions: [
       StarterKit,
