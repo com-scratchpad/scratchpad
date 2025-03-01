@@ -1,9 +1,0 @@
-/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/libstring_cache-6b43673e04e5854e.rmeta: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/atom.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/dynamic_set.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/static_sets.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/trivial_impls.rs
-
-/Users/ujwal/Programming/scratchpad/scratchpad/desktop/src-tauri/src/titlebar/target/debug/deps/string_cache-6b43673e04e5854e.d: /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/lib.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/atom.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/dynamic_set.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/static_sets.rs /Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/trivial_impls.rs
-
-/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/lib.rs:
-/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/atom.rs:
-/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/dynamic_set.rs:
-/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/static_sets.rs:
-/Users/ujwal/.cargo/registry/src/index.crates.io-6f17d22bba15001f/string_cache-0.8.8/src/trivial_impls.rs:
