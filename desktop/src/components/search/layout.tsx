@@ -1,4 +1,4 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarNavigator, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/search/sidebar"
 import { SearchPage } from "./content"
  
@@ -7,6 +7,7 @@ export default function SearchLayout({}: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
         <SidebarTrigger />
+        <SidebarNavigator />
         <SearchPage />
     </SidebarProvider>
   )

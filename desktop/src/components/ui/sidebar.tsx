@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { Menu } from "lucide-react";
+import { ArrowLeft, ArrowRight, Menu } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useNavigate } from "react-router-dom";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -303,6 +304,63 @@ const SidebarTrigger = React.forwardRef<
   );
 });
 SidebarTrigger.displayName = "SidebarTrigger";
+
+const SidebarNavigator = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  React.ComponentProps<typeof Button> & {
+    onNavigateLeft?: () => void;
+    onNavigateRight?: () => void;
+  }
+>(({ className, onClick, onNavigateLeft, onNavigateRight, ...props }, ref) => {
+  const { open } = useSidebar();
+  const [isMacOS, setIsMacOS] = React.useState(false);
+  const navigate = useNavigate();
+  
+  React.useEffect(() => {
+    setIsMacOS(navigator.platform.toLowerCase().includes('mac'));
+  }, []);
+  
+  return (
+    <div 
+      className={cn(
+        "absolute top-1.5 z-50 flex items-center gap-.5",
+        "transition-all duration-250 ease-in-out",
+        isMacOS && !open ? "left-26" : "left-76",
+        className
+      )}
+    >
+      <Button
+        ref={ref}
+        data-sidebar="navigator-left"
+        variant="ghost"
+        size="icon_sm"
+        className="h-7 w-7 min-w-7"
+        onClick={(event) => {
+          navigate(-1);
+        }}
+        {...props}
+      >
+        <ArrowLeft className="stroke-zinc-800" />
+        <span className="sr-only">Navigate Left</span>
+      </Button>
+      <Button
+        data-sidebar="navigator-right"
+        variant="ghost"
+        size="icon_sm"
+        className="h-7 w-7 min-w-7"
+        onClick={(event) => {
+          onClick?.(event);
+          onNavigateRight?.();
+        }}
+        {...props}
+      >
+        <ArrowRight className="stroke-zinc-800" />
+        <span className="sr-only">Navigate Right</span>
+      </Button>
+    </div>
+  );
+});
+SidebarNavigator.displayName = "SidebarNavigator";
 
 const SidebarRail = React.forwardRef<
 	HTMLButtonElement,
@@ -778,5 +836,6 @@ export {
 	SidebarRail,
 	SidebarSeparator,
 	SidebarTrigger,
+  SidebarNavigator,
 	useSidebar,
 };
