@@ -4,8 +4,8 @@ import "./Tiptap.css";
 import { Toggle } from "@/components/ui/toggle";
 import { Bold, Italic, Strikethrough } from "lucide-react";
 import Placeholder from "@tiptap/extension-placeholder";
-import { invoke } from "@tauri-apps/api/core";
 import { useEffect } from "react";
+import useEditorStore from "@/stores/editorStore";
 interface CreateDocumentResponse {
     document_id: string;
 }
@@ -17,8 +17,16 @@ interface TiptapProps {
 }
 
 export default (props: TiptapProps) => {
-  const documentId = undefined;
-  const accessToken = undefined;
+	const {
+        documentContent,
+		setDocumentTitle,
+		setDocumentContent
+    } = useEditorStore();
+
+	//TODO: allow user to set document title
+	useEffect(() => {
+		setDocumentTitle("Document 1");
+	}, []);
 
   const editor = useEditor({
     extensions: [
@@ -33,20 +41,16 @@ export default (props: TiptapProps) => {
         class: "flex-1 h-full overscroll-auto",
       },
     },
-    content: props.initialContent || '', // Ensure content is properly initialized
+    content: props.initialContent ?? documentContent, // Ensure content is properly initialized
     onUpdate({ editor }) {
-      const content = editor.getText();
-      if(props.updateContent)
-        props.updateContent(content);
+      const content = editor.getHTML();
+      if(props.updateContent) {
+		props.updateContent(content);
+	  } else {
+		setDocumentContent(content);
+	  }
     },
   });
-
-  // Update content when initialContent prop changes
-  useEffect(() => {
-    if (editor && props.initialContent) {
-      editor.commands.setContent(props.initialContent);
-    }
-  }, [editor, props.initialContent]);
 
 	const handleContainerClick = () => {
 		if (editor && !editor.isFocused) {
