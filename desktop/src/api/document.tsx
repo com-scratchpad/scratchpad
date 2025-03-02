@@ -4,11 +4,11 @@ import { getToken } from '@/lib/stronghold';
  * 
  * @param query - Search string used to find the relevant documents
  * @param textContents - List of document contents to summarize
- * @returns A stringified summary of the contents relevant to the query
- * @throws 
+ * @returns A JSON response of the request
+ * @throws Error - If the summary fails to generate
  */
 export async function summarize(query: string, textContents: string[]) {
-    const token = getToken();
+    const token = await getToken();
     const summaryResponse = await fetch('http://localhost:8000/secure/summarize', {
         method: 'POST',
         headers: {
@@ -35,7 +35,7 @@ export async function summarize(query: string, textContents: string[]) {
  * @throws - Error when the search fails
  */
 export async function search(query: string) {
-    const token = getToken();
+    const token = await getToken();
     const searchResponse = await fetch('http://localhost:8000/secure/search', {
         method: 'POST',
         headers: {
