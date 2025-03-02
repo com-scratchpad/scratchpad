@@ -13,6 +13,7 @@ import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { SaveButton } from "./components/save/SaveButton";
 import { ModeToggle } from "./providers/theme/toggle";
+import { SearchPanel } from "./components/search/SearchPanel";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +49,7 @@ function App() {
 				</header>
 				<Tiptap updateContent={(content: string) => {setContent(content)}}/>
 				<CommandDialogDemo />
+				<SearchPanel />
 			</SidebarInset>
 		</SidebarProvider>
 	);
