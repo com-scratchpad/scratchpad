@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetch } from "@tauri-apps/plugin-http";
-import { storeToken, initStore } from "@/lib/stronghold";
 import { GalleryVerticalEnd } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { register, VerifyEmailError } from "@/api/auth";
 
 
 export function RegisterForm({
@@ -29,36 +28,19 @@ export function RegisterForm({
         }
 
         try {
-            await initStore();
-            const response = await fetch("http://localhost:8000/public/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
-            
-            const data = await response.json();
-            
-            console.log(data)
-            console.log(data.message)
-
-            if (!response.ok) {
-                throw new Error("Registration failed");
-            }
-
-            
-            if (data.message && data.message.includes("verify your email")) {
+            await register({ email, password });
+            navigate("/");
+        } catch (error) {
+            if (error instanceof VerifyEmailError) {
                 // Show verification message to user
                 setError("Please check your email to verify your account");
                 setTimeout(() => {
                     navigate("/login");
                 }, 3000); // Redirect to login after 3 seconds
             } else {
-                await storeToken(data);
-                navigate("/");
+                console.log(error);
+                setError(error instanceof Error ? error.message : "Registration failed");
             }
-        } catch (err) {
-            console.log(err);
-            setError(err instanceof Error ? err.message : "Registration failed");
         }
     };
 
