@@ -14,14 +14,14 @@ import clsx from "clsx";
 import { SaveButton } from "./components/save/SaveButton";
 import { ModeToggle } from "./providers/theme/toggle";
 import { SearchPanel } from "./components/search/SearchPanel";
-import useEditorStore from  "@/stores/editorStore";
+import useEditorStore from "@/stores/editorStore";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
 	const {
-        documentTitle,
-        documentContent,
-    } = useEditorStore();
+		documentTitle,
+		documentContent,
+	} = useEditorStore();
 
 	return (
 		<SidebarProvider
@@ -42,13 +42,13 @@ function App() {
 				>
 					<SidebarTrigger size={"icon_sm"} className="-ml-1 transition-all" />
 					<div className="flex-1"></div>
-          <ModeToggle />
-					<SaveButton title={documentTitle} content={documentContent}/>
+					<ModeToggle />
+					<SaveButton title={documentTitle} content={documentContent} />
 					<Button size={"icon_sm"} variant={"ghost"}>
 						<MoreHorizontal />
 					</Button>
 				</header>
-				<Tiptap/>
+				<Tiptap />
 				<CommandDialogDemo />
 				<SearchPanel />
 			</SidebarInset>
