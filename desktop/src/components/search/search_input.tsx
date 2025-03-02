@@ -29,11 +29,20 @@ export function SearchInput() {
           })
         });
 
+        console.log("Search response status:", response.status); // Debug response status
+
         if (response.ok) {
           const data = await response.json();
+          console.log("Search response data:", data); // Debug full response data
+          
+          if (!data.chunks || data.chunks.length === 0) {
+            console.log("No results found for query");
+            return;
+          }
+
           setSearchResults(data.chunks);
           localStorage.setItem('searchResults', JSON.stringify(data.chunks));
-
+          
           const textContents = data.chunks.map((chunk: { content: string; id: string }) => chunk.content);
 
           const summaryResponse = await fetch('http://localhost:8000/secure/summarize', {
@@ -50,7 +59,9 @@ export function SearchInput() {
           setIsLoading(false);
 
           if (summaryResponse.ok) {
+
             const summaryData = await summaryResponse.json();
+            console.log("SUMMARY DATA", summaryData.summary)
             setCurrentSummary(summaryData.summary);
             localStorage.setItem('searchSummary', summaryData.summary);
           }
@@ -74,6 +85,7 @@ export function SearchInput() {
         <div className="flex rounded-md shadow-xs">
           <Input
           id={id}
+          onChange={(e) => setQuery(e.target.value)}
           className="-me-px flex-1 rounded-e-none shadow-none focus-visible:z-10"
           placeholder="Search"
           type="text"

@@ -13,10 +13,10 @@ async def search(search: SearchRequest, request: Request):
         response = request.state.supabase.rpc("match_documents", {
             "p_query_embedding": query_embedding,
             "p_user_id": request.state.user_id
-        }).execute()
-        return {"chunks" : response.data } # Return the data from the successful response
+            }).execute()
+        return {"chunks": response.data}
     except Exception as e:
-        logger.e(f"Failed to search: {e}")
+        logger.error(f"Failed to search: {e}")
 
 
 async def search_friends(search: SearchFriendsRequest, request: Request):
