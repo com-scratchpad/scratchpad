@@ -1,0 +1,88 @@
+import { getToken } from '@/lib/stronghold';
+
+/**
+ * 
+ * @param query - Search string used to find the relevant documents
+ * @param textContents - List of document contents to summarize
+ * @returns A stringified summary of the contents relevant to the query
+ * @throws 
+ */
+export async function summarize(query: string, textContents: string[]) {
+    const token = getToken();
+    const summaryResponse = await fetch('http://localhost:8000/secure/summarize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          'chunks': textContents,
+          'name': `Search: ${query}`
+        })
+    });
+
+    if (summaryResponse.ok) {
+        return await summaryResponse.json();
+    }
+
+    throw new Error(`Failed to get summary: ${summaryResponse}`)
+}
+
+/**
+ * 
+ * @param query - Search string used to find the relevant documents
+ * @returns - JSON response from the API call
+ * @throws - Error when the search fails
+ */
+export async function search(query: string) {
+    const token = getToken();
+    const searchResponse = await fetch('http://localhost:8000/secure/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query: query, 
+          matches: 5
+        })
+    });
+
+    if (searchResponse.ok) {
+        return await searchResponse.json();
+    }
+
+    throw new Error(`Search failed: ${searchResponse}`);
+}
+
+export type DocumentProps = {
+    title: string;
+    content: string;
+}
+/**
+ * 
+ * @param props - DocumentProps which contains the title and content of the document
+ * @throws Error - If the document fails to save
+ */
+export async function saveDocument(props: DocumentProps) {
+    const { title, content } = props;
+    const token = await getToken();
+    const response = await fetch('http://localhost:8000/secure/document', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+        name: title,
+        file_content: content, 
+        })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        console.log("Saved document with response: ", data);
+        return;
+    }
+    throw new Error(`Failed to save document: ${response}`);
+}

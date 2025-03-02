@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetch } from "@tauri-apps/plugin-http";
-import { storeToken, initStore } from "@/lib/stronghold";
 import { GalleryVerticalEnd } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { login } from "@/api/auth";
 
 export function LoginForm({
 	className,
@@ -22,30 +21,11 @@ export function LoginForm({
 		setError("");
 
 		try {
-			console.log("http://localhost:8000/public/login");
-			await initStore(); // Ensure Stronghold is initialized before using it
-			console.log("http://localhost:8000/public/login");
-
-			const response = await fetch("http://localhost:8000/public/login", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ email, password }),
-			});
-
-			if (!response.ok) {
-				throw new Error("Invalid credentials");
-			}
-
-			const data = await response.json();
-			const token = data.access_token; // Ensure API returns { token: "JWT_TOKEN" }
-
-			if (!token) throw new Error("No token received");
-
-			await storeToken(token); // Securely store token using Stronghold
+			await login({ email, password });
 
 			navigate("/");
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			setError(err instanceof Error ? err.message : "Login failed");
 		}
 	};

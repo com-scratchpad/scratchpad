@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react";
 import { Loader2 } from "lucide-react"
 import { useId, useState } from "react";
-import { getToken } from '@/lib/stronghold';
+import { search, summarize } from '@/api/document';
  
 export function SearchInput() {
   const id = useId();
@@ -16,41 +16,18 @@ export function SearchInput() {
     setIsLoading(true);
     if (query.trim()) {
       try {
-        const token = await getToken();
-        const response = await fetch('http://localhost:8000/secure/search', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: query, 
-            matches: 5
-          })
-        });
+        const searchResults = await search(query);
 
-        if (response.ok) {
-          const data = await response.json();
-          setSearchResults(data.chunks);
-          localStorage.setItem('searchResults', JSON.stringify(data.chunks));
+        if (searchResults !== null) {
+          setSearchResults(searchResults.chunks);
+          localStorage.setItem('searchResults', JSON.stringify(searchResults.chunks));
 
-          const textContents = data.chunks.map((chunk: { content: string; id: string }) => chunk.content);
+          const textContents = searchResults.chunks.map((chunk: { content: string; id: string }) => chunk.content);
+          const summaryData = await summarize(query, textContents);
 
-          const summaryResponse = await fetch('http://localhost:8000/secure/summarize', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              'chunks': textContents,
-              'name': `Search: ${query}`
-            })
-          });
           setIsLoading(false);
 
-          if (summaryResponse.ok) {
-            const summaryData = await summaryResponse.json();
+          if (summaryData !== null) {
             setCurrentSummary(summaryData.summary);
             localStorage.setItem('searchSummary', summaryData.summary);
           }
