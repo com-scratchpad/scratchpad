@@ -10,6 +10,7 @@ async def search(search: SearchRequest, request: Request):
     query_embedding = get_embedding(request.state.openai, tokens)
 
     try:
+        # Match documents is a SQL funciton that can be changed via SUPABASE
         response = request.state.supabase.rpc("match_documents", {
             "p_query_embedding": query_embedding,
             "p_user_id": request.state.user_id
