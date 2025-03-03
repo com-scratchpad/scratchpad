@@ -5,10 +5,11 @@ import useSummaryStore from '@/stores/summaryStore';
  * 
  * @param query - Search string used to find the relevant documents
  * @param textContents - List of document contents to summarize
- * @returns A stringified summary of the contents relevant to the query
- * @throws 
+ * @returns A JSON response of the request
+ * @throws Error - If the summary fails to generate
  */
 export async function summarize(query: string, textContents: string[]) {
+
     const setSummary = useSummaryStore.getState().setSummary;
     const token = await getToken();
     const summaryResponse = await fetch('http://localhost:8000/secure/summarize', {
