@@ -34,7 +34,7 @@ def chunk_text(openai_client, text: str, chunk_percentage: float = 0.05,
     overlap_size = int(target_chunk_size * overlap_percentage)
     
     # Adjust chunking strategy based on document structure
-    paragraphs = text.split('\n\n')
+    paragraphs = [p for p in text.split('\n\n') if p.strip()]
     
     # If we have clear paragraph structure, use it
     if len(paragraphs) > 5:
@@ -52,7 +52,7 @@ def chunk_text(openai_client, text: str, chunk_percentage: float = 0.05,
             "content": chunk_text,
             "embedding": get_embedding(openai_client, chunk_text)
         })
-    
+
     return chunks
 
 def chunk_by_paragraphs_percentage(openai_client, paragraphs, encoder, 

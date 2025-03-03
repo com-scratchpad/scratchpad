@@ -7,7 +7,6 @@ import { format, parseISO } from 'date-fns';
 export function SearchPage() {
   const summary = useSummaryStore(state => state.summary);
   const chunks = useChunksStore(state => state.chunks);
-  console.log("CHUNKS:", chunks)
   
   return (
     <div className="h-[calc(100vh-7px)] pl-4 w-full flex flex-col pr-4 pt-10 overflow-hidden">
