@@ -13,7 +13,7 @@ import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { SaveButton } from "./components/save/SaveButton";
 import { ModeToggle } from "./providers/theme/toggle";
-import { SearchPanel } from "./components/search/SearchPanel";
+import { SearchPanel } from "./components/command/SearchPanel.tsx";
 import useEditorStore from "@/stores/editorStore";
 
 function App() {
