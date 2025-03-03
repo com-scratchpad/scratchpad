@@ -15,9 +15,10 @@ interface TiptapProps {
 
 export default (props: TiptapProps) => {
     const {
-        documentContent,
+        documentHTML,
         setDocumentTitle,
-        setDocumentContent
+        setDocumentHTML,
+        setDocumentPlainText
     } = useEditorStore();
 
     //TODO: allow user to set document title
@@ -38,13 +39,15 @@ export default (props: TiptapProps) => {
                 class: "flex-1 h-full overscroll-auto",
             },
         },
-        content: props.initialContent ?? documentContent, // Ensure content is properly initialized
+        content: props.initialContent ?? documentHTML, // Ensure content is properly initialized
         onUpdate({ editor }) {
-            const content = editor.getHTML();
+            const plainText = editor.getText();
+            const html = editor.getHTML();
             if (props.updateContent) {
-                props.updateContent(content);
+                props.updateContent(plainText);
             } else {
-                setDocumentContent(content);
+                setDocumentHTML(html);
+                setDocumentPlainText(plainText);
             }
         },
     });
