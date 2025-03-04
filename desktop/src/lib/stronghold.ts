@@ -26,6 +26,7 @@ export const storeCredentials = async (data: any): Promise<void> => {
 
 export const getToken = async (): Promise<string | null> => {
     try {
+        await initStore();
         const token = await store.get<string>(TOKEN_KEY);
         return token || null;
     } catch {

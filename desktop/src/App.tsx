@@ -9,13 +9,15 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { SaveButton } from "./components/save/SaveButton";
 import { ModeToggle } from "./providers/theme/toggle";
 
 import { SearchPanel } from "@/components/command/SearchPanel";
 import useEditorStore from "@/stores/editorStore";
+import { initStore } from "./lib/stronghold";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +25,8 @@ function App() {
 		documentTitle,
 		documentContent,
 	} = useEditorStore();
+
+    useEffect(()=> {initStore()}, [])
 
 	return (
 		<SidebarProvider
@@ -34,6 +38,7 @@ function App() {
 				} as React.CSSProperties
 			}
 		>
+            <Toaster />
 			<AppSidebar />
 			<SidebarInset>
 				<header

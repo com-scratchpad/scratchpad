@@ -4,19 +4,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { ChevronRight, Files, Plus } from "lucide-react"
 import { Button } from "../ui/button"
 import { useDocumentStore } from "@/stores/documentStore"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import { useEffect } from "react";
 
 var docId = 1;
 
-export function NavDocuments({
-}: {
-  }) {
+export function NavDocuments() {
   const documents = useDocumentStore((state) => state);
 
   const addDocument = async () => {
@@ -26,8 +24,9 @@ export function NavDocuments({
       content: "test",
     }
     documents.addDocument(document)
-    console.log("adding document", document)
   }
+
+  useEffect(()=> {}, [documents])
 
   return (
     <SidebarMenu>
@@ -53,7 +52,6 @@ export function NavDocuments({
             </SidebarMenuAction>
           </CollapsibleTrigger>
           <CollapsibleContent>
-
             <SidebarMenuSub>
               {documents.documents.map((document) => (
                 <SidebarMenuSubItem key={document.id}>
