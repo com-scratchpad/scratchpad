@@ -1,4 +1,4 @@
-import { storeToken, initStore } from '@/lib/stronghold';
+import { storeCredentials as storeCredentials, initStore } from '@/lib/stronghold';
 
 export type LoginProps = {
     email: string;
@@ -24,10 +24,11 @@ export async function login(props: LoginProps) {
 
     const data = await response.json();
     const token = data.access_token; // Ensure API returns { token: "JWT_TOKEN" }
+    console.log(data)
 
     if (!token) throw new Error("No token received");
 
-    await storeToken(token); // Securely store token using Stronghold
+    await storeCredentials(data); // Securely store token using Stronghold
 }
 
 export async function register(props: LoginProps) {
@@ -47,7 +48,7 @@ export async function register(props: LoginProps) {
         throw new VerifyEmailError("Please check your email to verify your account");
     }
 
-    await storeToken(data);
+    await storeCredentials(data);
 }
 
 export class VerifyEmailError extends Error {

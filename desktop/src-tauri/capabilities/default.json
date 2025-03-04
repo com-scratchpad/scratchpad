@@ -23,6 +23,15 @@
     "store:default",
     "stronghold:default",
     "http:allow-fetch",
+    "fs:allow-open",
+    "fs:allow-write",
+    "fs:allow-read",
+    "fs:allow-rename",
+    "fs:allow-mkdir",
+    "fs:allow-remove",
+    "fs:allow-write-text-file",
+    "fs:scope-download-recursive",
+    "fs:scope-resource-recursive",
     {
       "identifier": "http:default",
       "allow": [

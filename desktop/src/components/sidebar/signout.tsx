@@ -1,4 +1,4 @@
-import { clearToken } from "@/lib/stronghold";
+import { clearCredentials } from "@/lib/stronghold";
 import { Button } from "../ui/button"
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,7 @@ export default function SignOutButton() {
 
     const signOut = async () => {
         try {
-            await clearToken();
+            await clearCredentials();
         } catch (error) {
             console.error("Error clearing token from Stronghold:", error);
         }
@@ -16,7 +16,7 @@ export default function SignOutButton() {
 
     return (
         <Button onClick={signOut}>
-            <span>SignOut</span>
+            <span>Sign Out</span>
         </Button>
     )
 }

@@ -1,6 +1,5 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod editor;
-mod setup;
 
 use tauri::Manager;
 use titlebar::WebviewWindowExt;
@@ -19,7 +18,7 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(titlebar::init())
-        .invoke_handler(tauri::generate_handler![greet, setup::setup, editor::save])
+        .invoke_handler(tauri::generate_handler![greet, editor::save])
         .setup(|app| {
             let main_window = app.get_webview_window("main").unwrap();
             main_window.create_overlay_titlebar().unwrap();
