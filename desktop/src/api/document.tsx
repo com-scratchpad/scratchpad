@@ -1,4 +1,5 @@
 import { getToken } from '@/lib/stronghold';
+import useSummaryStore from '@/stores/summaryStore';
 
 /**
  * 
@@ -8,6 +9,8 @@ import { getToken } from '@/lib/stronghold';
  * @throws Error - If the summary fails to generate
  */
 export async function summarize(query: string, textContents: string[]) {
+
+    const setSummary = useSummaryStore.getState().setSummary;
     const token = await getToken();
     const summaryResponse = await fetch('http://localhost:8000/secure/summarize', {
         method: 'POST',
@@ -22,7 +25,9 @@ export async function summarize(query: string, textContents: string[]) {
     });
 
     if (summaryResponse.ok) {
-        return await summaryResponse.json();
+        const data = await summaryResponse.json();
+        setSummary(data.summary);
+        return data;
     }
 
     throw new Error(`Failed to get summary: ${summaryResponse}`)
