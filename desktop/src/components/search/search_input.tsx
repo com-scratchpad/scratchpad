@@ -1,16 +1,16 @@
 import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react";
-import { Loader2 } from "lucide-react"
+import { Search, Loader2 } from "lucide-react";
 import { useId, useState } from "react";
 import { search, summarize } from '@/api/document';
+import useChunksStore from '@/stores/chunksStore';
+import useSummaryStore from '@/stores/summaryStore';
  
 export function SearchInput() {
   const id = useId();
-
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [currentSummary, setCurrentSummary] = useState("");
+  const setChunks = useChunksStore(state => state.setChunks);
+  const setSummary = useSummaryStore(state => state.setSummary);
   
   const handleSearch = async () => {
     setIsLoading(true);
@@ -19,22 +19,19 @@ export function SearchInput() {
         const searchResults = await search(query);
 
         if (searchResults !== null) {
-          setSearchResults(searchResults.chunks);
-          localStorage.setItem('searchResults', JSON.stringify(searchResults.chunks));
-
+          setChunks(searchResults.chunks);
+          
           const textContents = searchResults.chunks.map((chunk: { content: string; id: string }) => chunk.content);
           const summaryData = await summarize(query, textContents);
 
-          setIsLoading(false);
-
           if (summaryData !== null) {
-            setCurrentSummary(summaryData.summary);
-            localStorage.setItem('searchSummary', summaryData.summary);
+            setSummary(summaryData.summary);
           }
-          setIsLoading(false);
         }
       } catch (error) {
         console.error('Search or summarize failed:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -51,6 +48,7 @@ export function SearchInput() {
         <div className="flex rounded-md shadow-xs">
           <Input
           id={id}
+          onChange={(e) => setQuery(e.target.value)}
           className="-me-px flex-1 rounded-e-none shadow-none focus-visible:z-10"
           placeholder="Search"
           type="text"
