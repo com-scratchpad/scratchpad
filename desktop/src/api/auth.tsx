@@ -24,6 +24,7 @@ export async function login(props: LoginProps) {
 
     const data = await response.json();
     const token = data.access_token; // Ensure API returns { token: "JWT_TOKEN" }
+    console.log(data)
 
     if (!token) throw new Error("No token received");
 

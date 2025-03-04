@@ -4,12 +4,10 @@ import { persist } from 'zustand/middleware';
 interface EditorState {
     documentId: string | undefined;
     documentTitle: string;
-    documentHTML: string;
-    documentPlainText: string;
+    documentContent: string;
     setDocumentId: (id: string) => void;
     setDocumentTitle: (title: string) => void;
-    setDocumentHTML: (html: string) => void;
-    setDocumentPlainText: (text: string) => void;
+    setDocumentContent: (content: string) => void;
     resetDocument: () => void;
 }
 
@@ -18,19 +16,16 @@ const useEditorStore = create<EditorState>()(
         (set) => ({
             documentId: undefined,
             documentTitle: '',
-            documentHTML: '',
-            documentPlainText: '',
+            documentContent: '',
 
             setDocumentId: (id: string) => set({ documentId: id }),
             setDocumentTitle: (title: string) => set({ documentTitle: title }),
-            setDocumentHTML: (html: string) => set({ documentHTML: html }),
-            setDocumentPlainText: (text: string) => set({ documentPlainText: text }),
+            setDocumentContent: (content: string) => set({ documentContent: content }),
 
             resetDocument: () => set({
                 documentId: undefined,
                 documentTitle: '',
-                documentHTML: '',
-                documentPlainText: '',
+                documentContent: ''
             }),
         }),
         {

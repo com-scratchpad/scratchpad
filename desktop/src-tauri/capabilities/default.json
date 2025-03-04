@@ -5,27 +5,6 @@
   "windows": [
     "main"
   ],
-  "plugins": {
-    "fs": {
-      "scope": {
-        "allow": [
-          "$HOME",
-          "$HOME/*",
-          "$CONFIG",
-          "$CONFIG/**",
-          "$APP_CONFIG",
-          "$APP_CONFIG/**"
-        ],
-        "requireLiteralLeadingDot": false
-      },
-      "fs:allow-home-read": true,
-      "fs:allow-home-read-recursive": true,
-      "fs:allow-home-meta": true,
-      "fs:allow-home-meta-recursive": true,
-      "fs:scope-home": true,
-      "fs:scope-home-index": true
-    }
-  },
   "permissions": [
     "core:default",
     "shell:allow-open",
@@ -44,12 +23,15 @@
     "store:default",
     "stronghold:default",
     "http:allow-fetch",
-    "fs:read-all",
-    "fs:write-all",
-    {
-      "identifier": "fs:default",
-      "allow": [{ "path": "$APPDATA/**" }]
-    },
+    "fs:allow-open",
+    "fs:allow-write",
+    "fs:allow-read",
+    "fs:allow-rename",
+    "fs:allow-mkdir",
+    "fs:allow-remove",
+    "fs:allow-write-text-file",
+    "fs:scope-download-recursive",
+    "fs:scope-resource-recursive",
     {
       "identifier": "http:default",
       "allow": [

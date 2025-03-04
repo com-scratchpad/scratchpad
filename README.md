@@ -27,6 +27,4 @@ Running backend
 Go into directory `scratchpad/server`, then run `uv run fastapi dev`
 ##
       cd <scratchpad directory>/server
-      source .venv/bin/activate
       uvicorn app.main:app --reload
-      # .venv/bin/deactivate to deload venv
