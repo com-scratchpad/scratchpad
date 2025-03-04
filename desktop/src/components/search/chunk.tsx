@@ -5,35 +5,52 @@ import { FileIcon, UserIcon, CalendarIcon, TagIcon } from "lucide-react";
 
 interface ChunkProps {
   content: string;
-  metadata?: {
+  metadata: {
     date?: string;
-    author?: string;
-    filepath?: string;
-    tags?: string[];
-    note?: string;
+    similarity?: string;
+    document_id?: string;
   };
+  maxLength?: number;
 }
 
-export function Chunk({ content, metadata }: ChunkProps) {
+export function Chunk({ content, metadata, maxLength = 300 }: ChunkProps) {
+  const truncatedContent = content.slice(0, maxLength) + (content.length > maxLength ? '...' : '');
+
   return (
     <Card className="group relative overflow-hidden border-transparent bg-transparent shadow-none hover:cursor-pointer
-      hover:bg-accent/10 
-      transition-colors 
-      duration-200 
-      ease-in-out 
-      hover:scale-[101%] 
-      active:scale-[99.5%]
-      ">
+      hover:bg-accent/10 transition-colors duration-200 ease-in-out hover:scale-[101%] active:scale-[99.5%]">
       <CardContent className="relative z-10 pb-2">
-        <div className="text-foreground/80 text-xs leading-relaxed 
-          bg-gradient-to-b from-foreground/20 via-foreground/70 to-foreground/20 
-          bg-clip-text text-transparent">
-          {content}
+        <div className="text-foreground/80 text-xs leading-relaxed bg-gradient-to-b from-foreground/20 via-foreground/70 to-foreground/20 bg-clip-text text-transparent">
+          {truncatedContent}
         </div>
       </CardContent>
       
       {metadata && (
         <CardFooter className="px-5 pb-4 pt-0 flex flex-wrap items-center gap-1 relative z-10">
+          {metadata.similarity && (
+            <HoverCard>
+              <HoverCardTrigger>
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <span className="text-[0.65rem]">
+                    Match: {metadata.similarity}
+                  </span>
+                </Badge>
+              </HoverCardTrigger>
+            </HoverCard>  
+          )}
+
+          {metadata.document_id && (
+            <HoverCard>
+              <HoverCardTrigger>
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <span className="text-[0.65rem] truncate max-w-[100px]">
+                    ID: {metadata.document_id.slice(0, 8)}...
+                  </span>
+                </Badge>
+              </HoverCardTrigger>
+            </HoverCard>
+          )}
+
           {metadata.date && (
             <HoverCard>
               <HoverCardTrigger>
