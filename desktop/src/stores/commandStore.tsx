@@ -18,16 +18,16 @@ export const usePanelStore = create<PanelState>((set) => ({
 	search: false,
 	editor: false,
 	setPanel: (panel: Panel, isOpen?: boolean) =>
-		set((state) => {
-			const newState = {} as PanelState;
+		set((_) => {
+			var newState = {} as PanelState;
 			Object.values(Panel).forEach((p) => {
 				newState[p] = false;
 			});
-      if (!isOpen) {
-        return newState;
-      }
-      newState[panel] = true;
-			return newState;
+          if (!isOpen) {
+            return newState;
+          }
+          newState[panel] = true;
+          return newState;
 		}),
 	
 }));

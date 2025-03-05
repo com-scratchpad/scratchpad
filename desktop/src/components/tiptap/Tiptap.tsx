@@ -6,9 +6,6 @@ import { Bold, Italic, Strikethrough } from "lucide-react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEffect } from "react";
 import useEditorStore from "@/stores/editorStore";
-interface CreateDocumentResponse {
-    document_id: string;
-}
 
 interface TiptapProps {
     initialContent?: string;

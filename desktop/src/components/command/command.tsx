@@ -1,11 +1,8 @@
 import * as React from "react";
 import {
-  Calculator,
-  Calendar,
   CreditCard,
   Search,
   Settings,
-  Smile,
   User,
 } from "lucide-react";
 
@@ -20,7 +17,6 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { usePanelStore, Panel } from "@/stores/commandStore";
-import { SearchPanel } from "@/components/command/SearchPanel"
 
 export function CommandDialogDemo() {
   const panel = usePanelStore((state) => state);
