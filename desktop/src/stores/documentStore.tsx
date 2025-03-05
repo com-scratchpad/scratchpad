@@ -51,6 +51,8 @@ export const useDocumentStore = create<DocumentListState>((set) => ({
             const userId = await getUserId() ?? "null";
             if (userId == "null") {
                 console.error("Failed to add documetn because userId cannot be found");
+                toast("Failed to add document")
+                return
             }
             const documentsDir = await join(userId, DOCUMENTS_DIRNAME)
             await mkdir(documentsDir, { baseDir: BaseDirectory.AppData, recursive: true })
