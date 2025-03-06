@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
   CreditCard,
+  Palette,
   Search,
   Settings,
   User,
@@ -54,6 +55,10 @@ export function CommandDialogDemo() {
             <CommandItem onSelect={() => panel.setPanel(Panel.SEARCH, true)}>
               <Search />
               <span>Search</span>
+            </CommandItem>
+            <CommandItem onSelect={() => panel.setPanel(Panel.THEME, true)}>
+              <Palette />
+              <span>Theme</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
