@@ -10,6 +10,7 @@ from app.router.endpoints.register import register
 from app.router.endpoints.search import search, search_friends
 from app.router.endpoints.summarize import summarize
 from app.router.middleware.http import AuthMiddleware
+from app.router.endpoints.file_Search import file_search
 
 
 # Main entrypoint for scratchpad backend. Defines secure and public routes. Add new
@@ -28,6 +29,7 @@ def init_router():
     secure_app.add_api_route("/search", search, methods=["POST"])
     secure_app.add_api_route("/search_friends", search_friends, methods=["POST"])
     secure_app.add_api_route("/summarize", summarize, methods=["POST"])
+    secure_app.add_api_route("/file_search", file_search, methods=["POST"])
 
     public_app = FastAPI(dependencies=[Depends(get_router_deps)], root_path="/public")
     public_app.add_api_route("/login", login, methods=["POST"])
