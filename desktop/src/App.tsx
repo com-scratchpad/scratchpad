@@ -15,8 +15,9 @@ import { SaveButton } from "./components/save/SaveButton";
 import { ModeToggle } from "./providers/theme/toggle";
 import { SearchPanel } from "./components/search/SearchPanel";
 import useEditorStore from "@/stores/editorStore";
-import { initStore } from "./lib/stronghold";
-import { Toaster } from "./components/ui/sonner";
+import { initStore } from "@/lib/stronghold";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemePanel } from "./components/command/ThemePanel";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -38,17 +39,13 @@ function App() {
 			}
 		>
             <Toaster />
-			<AppSidebar />
 			<SidebarInset>
 				<header
 					className={clsx("flex h-10 shrink-0 ml-16 items-center gap-2 px-3", {
 						"-ml-1": isOpen,
 					})}
 				>
-					<SidebarTrigger size={"icon_sm"} className="-ml-1 transition-all" />
 					<div className="flex-1"></div>
-					<ModeToggle />
-					<SaveButton title={documentTitle} content={documentPlainText} />
 					<Button size={"icon_sm"} variant={"ghost"}>
 						<MoreHorizontal />
 					</Button>
@@ -56,6 +53,7 @@ function App() {
 				<Tiptap />
 				<CommandDialogDemo />
 				<SearchPanel />
+        <ThemePanel />
 			</SidebarInset>
 		</SidebarProvider>
 	);

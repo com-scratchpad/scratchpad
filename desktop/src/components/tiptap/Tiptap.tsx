@@ -21,16 +21,15 @@ export default (props: TiptapProps) => {
         setDocumentPlainText
     } = useEditorStore();
 
-    //TODO: allow user to set document title
-    useEffect(() => {
-        setDocumentTitle("Document 1");
-    }, []);
-
+    // Determine initial content - only use it if it's not empty
+    const initialContent = (props.initialContent || documentHTML) || '';
+    
     const editor = useEditor({
         extensions: [
             StarterKit,
             Placeholder.configure({
-                placeholder: props.placeholder,
+                placeholder: props.placeholder || 'Start typing...',
+                emptyEditorClass: 'is-editor-empty',
             }),
         ],
         autofocus: true,
@@ -39,7 +38,7 @@ export default (props: TiptapProps) => {
                 class: "flex-1 h-full overscroll-auto",
             },
         },
-        content: props.initialContent ?? documentHTML, // Ensure content is properly initialized
+        content: initialContent,
         onUpdate({ editor }) {
             const plainText = editor.getText();
             const html = editor.getHTML();
@@ -57,6 +56,15 @@ export default (props: TiptapProps) => {
             editor.commands.focus("end");
         }
     };
+
+    // Add CSS for placeholder (in your actual CSS file)
+    // .is-editor-empty:first-child::before {
+    //     content: attr(data-placeholder);
+    //     float: left;
+    //     color: #adb5bd;
+    //     pointer-events: none;
+    //     height: 0;
+    // }
 
     return (
         <div
