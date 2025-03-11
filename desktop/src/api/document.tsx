@@ -39,9 +39,9 @@ export async function summarize(query: string, textContents: string[]) {
  * @returns - JSON response from the API call
  * @throws - Error when the search fails
  */
-export async function search(query: string) {
+export async function search_chunks(query: string) {
     const token = await getToken();
-    const searchResponse = await fetch('http://localhost:8000/secure/search', {
+    const searchResponse = await fetch('http://localhost:8000/secure/search_chunks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

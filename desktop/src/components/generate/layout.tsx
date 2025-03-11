@@ -1,14 +1,14 @@
 import { SidebarNavigator, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/search/sidebar"
-import { SearchPage } from "./content"
+import { AppSidebar } from "@/components/generate/sidebar"
+import { GeneratePage } from "./content"
  
-export default function SearchLayout({}: { children: React.ReactNode }) {
+export default function GenerateLayout({}: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
         <SidebarTrigger />
         <SidebarNavigator />
-        <SearchPage />
+        <GeneratePage />
     </SidebarProvider>
   )
 }

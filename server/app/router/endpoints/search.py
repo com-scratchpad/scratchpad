@@ -1,11 +1,11 @@
 from fastapi import Request, Response
 
 from app.common.text import get_embedding, tokenize_text
-from app.models.search import SearchFriendsRequest, SearchRequest
+from app.models.search import SearchFriendsRequest, ChunkRequest
 from app.logging import logger
 
 
-async def search(search: SearchRequest, request: Request):
+async def search_chunks(search: ChunkRequest, request: Request):
     _, tokens = tokenize_text(search.query)
     query_embedding = get_embedding(request.state.openai, tokens)
 

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "@/App";
-import SearchLayout from "@/components/search/layout";
+import GenerateLayout from "@/components/generate/layout";
 import AuthGuard from "./auth_guard";
 import LoginPage from "./login";
 import RegisterPage from "./register";
@@ -23,10 +23,10 @@ export const router = createBrowserRouter([
 		),
 	},
 	{
-		path: "/search",
+		path: "/generate",
 		element: (
 			<AuthGuard>
-				<SearchLayout children/>
+				<GenerateLayout children/>
 			</AuthGuard>
 		),
 	},
