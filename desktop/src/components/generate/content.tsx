@@ -4,7 +4,7 @@ import useSummaryStore from '@/stores/summaryStore';
 import useChunksStore from '@/stores/chunksStore';
 import { format, parseISO } from 'date-fns';
 
-export function SearchPage() {
+export function GeneratePage() {
   const summary = useSummaryStore(state => state.summary);
   const chunks = useChunksStore(state => state.chunks);
   

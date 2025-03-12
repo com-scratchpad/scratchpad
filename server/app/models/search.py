@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 # Specify query to search all documents
-class SearchRequest(BaseModel):
+class ChunkRequest(BaseModel):
     query: str
     matches: int = 5
 
