@@ -1,11 +1,9 @@
 import * as React from "react";
 import {
-  Calculator,
-  Calendar,
   CreditCard,
+  Palette,
   Search,
   Settings,
-  Smile,
   User,
 } from "lucide-react";
 
@@ -20,7 +18,6 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { usePanelStore, Panel } from "@/stores/commandStore";
-import { SearchPanel } from "@/components/command/SearchPanel"
 
 export function CommandDialogDemo() {
   const panel = usePanelStore((state) => state);
@@ -58,6 +55,10 @@ export function CommandDialogDemo() {
             <CommandItem onSelect={() => panel.setPanel(Panel.SEARCH, true)}>
               <Search />
               <span>Search</span>
+            </CommandItem>
+            <CommandItem onSelect={() => panel.setPanel(Panel.THEME, true)}>
+              <Palette />
+              <span>Theme</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />

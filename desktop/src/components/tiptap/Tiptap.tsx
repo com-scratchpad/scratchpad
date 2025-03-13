@@ -6,9 +6,6 @@ import { Bold, Italic, Strikethrough } from "lucide-react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEffect } from "react";
 import useEditorStore from "@/stores/editorStore";
-interface CreateDocumentResponse {
-    document_id: string;
-}
 
 interface TiptapProps {
     initialContent?: string;
@@ -18,21 +15,21 @@ interface TiptapProps {
 
 export default (props: TiptapProps) => {
     const {
-        documentContent,
+        documentHTML,
         setDocumentTitle,
-        setDocumentContent
+        setDocumentHTML,
+        setDocumentPlainText
     } = useEditorStore();
 
-    //TODO: allow user to set document title
-    useEffect(() => {
-        setDocumentTitle("Document 1");
-    }, []);
-
+    // Determine initial content - only use it if it's not empty
+    const initialContent = (props.initialContent || documentHTML) || '';
+    
     const editor = useEditor({
         extensions: [
             StarterKit,
             Placeholder.configure({
-                placeholder: props.placeholder,
+                placeholder: props.placeholder || 'Start typing...',
+                emptyEditorClass: 'is-editor-empty',
             }),
         ],
         autofocus: true,
@@ -41,13 +38,15 @@ export default (props: TiptapProps) => {
                 class: "flex-1 h-full overscroll-auto",
             },
         },
-        content: props.initialContent ?? documentContent, // Ensure content is properly initialized
+        content: initialContent,
         onUpdate({ editor }) {
-            const content = editor.getHTML();
+            const plainText = editor.getText();
+            const html = editor.getHTML();
             if (props.updateContent) {
-                props.updateContent(content);
+                props.updateContent(plainText);
             } else {
-                setDocumentContent(content);
+                setDocumentHTML(html);
+                setDocumentPlainText(plainText);
             }
         },
     });
@@ -57,6 +56,15 @@ export default (props: TiptapProps) => {
             editor.commands.focus("end");
         }
     };
+
+    // Add CSS for placeholder (in your actual CSS file)
+    // .is-editor-empty:first-child::before {
+    //     content: attr(data-placeholder);
+    //     float: left;
+    //     color: #adb5bd;
+    //     pointer-events: none;
+    //     height: 0;
+    // }
 
     return (
         <div

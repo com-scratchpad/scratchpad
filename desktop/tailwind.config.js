@@ -4,13 +4,13 @@ export default {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
 	theme: {
     	extend: {
-        spacing: {
-          '18': '4.5rem',
-          '26': '6.5rem',
-          '66': '16.5rem',
-          '68': '17rem',
-          '76': '18.5rem',
-        },
+    		spacing: {
+    			'18': '4.5rem',
+    			'26': '6.5rem',
+    			'66': '16.5rem',
+    			'68': '17rem',
+    			'76': '18.5rem'
+    		},
     		borderRadius: {
     			lg: 'var(--radius)',
     			md: 'calc(var(--radius) - 2px)',
@@ -67,6 +67,28 @@ export default {
     				border: 'hsl(var(--sidebar-border))',
     				ring: 'hsl(var(--sidebar-ring))'
     			}
+    		},
+    		keyframes: {
+    			'accordion-down': {
+    				from: {
+    					height: '0'
+    				},
+    				to: {
+    					height: 'var(--radix-accordion-content-height)'
+    				}
+    			},
+    			'accordion-up': {
+    				from: {
+    					height: 'var(--radix-accordion-content-height)'
+    				},
+    				to: {
+    					height: '0'
+    				}
+    			}
+    		},
+    		animation: {
+    			'accordion-down': 'accordion-down 0.2s ease-out',
+    			'accordion-up': 'accordion-up 0.2s ease-out'
     		}
     	}
     },
