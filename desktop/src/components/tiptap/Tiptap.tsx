@@ -1,16 +1,67 @@
-import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import "./Tiptap.css";
-import { Toggle } from "@/components/ui/toggle";
-import { Bold, Italic, Strikethrough } from "lucide-react";
+import Document from '@tiptap/extension-document';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 import Placeholder from "@tiptap/extension-placeholder";
-import { useEffect } from "react";
+import { Extension } from '@tiptap/core';
+import "./Tiptap.css";
 import useEditorStore from "@/stores/editorStore";
+import { EditorToolbar } from "@/tiptap/toolbar";
+import { useEffect } from "react";
+
+// Create a custom document that enforces the structure
+const CustomDocument = Document.extend({
+  content: 'heading block*',
+})
+
+// Custom extension to enforce non-empty title field
+const RequiredHeading = Extension.create({
+  name: 'requiredHeading',
+
+  addKeyboardShortcuts() {
+    return {
+      'Enter': ({ editor }) => {
+        // Get the current selection position
+        const { from } = editor.state.selection;
+        
+        // Determine if the selection is inside a heading
+        const isInHeading = editor.isActive('heading');
+        
+        // If in heading and it's empty, prevent the Enter key behavior
+        if (isInHeading) {
+          const headingNode = editor.getJSON().content?.find(node => 
+            node.type === 'heading'
+          );
+          
+          const headingText = headingNode?.content?.[0]?.text || '';
+          
+          if (!headingText.trim()) {
+            // Add a visual indicator that the heading is required
+            const headingElement = document.querySelector('h1');
+            if (headingElement) {
+              headingElement.classList.add('required-heading-empty');
+              setTimeout(() => {
+                headingElement.classList.remove('required-heading-empty');
+              }, 500);
+            }
+            return true; // Prevent default Enter behavior
+          }
+        }
+        
+        return false; // Allow default Enter behavior
+      }
+    }
+  },
+})
 
 interface TiptapProps {
     initialContent?: string;
     updateContent?: CallableFunction;
     placeholder?: string;
+    titlePlaceholder?: string;
 }
 
 export default (props: TiptapProps) => {
@@ -20,91 +71,125 @@ export default (props: TiptapProps) => {
         setDocumentHTML,
         setDocumentPlainText
     } = useEditorStore();
-
-    // Determine initial content - only use it if it's not empty
-    const initialContent = (props.initialContent || documentHTML) || '';
+    
+    // Default initial content with a heading
+    const initialContent = props.initialContent || documentHTML || `
+      <h1></h1>
+      <p></p>
+    `;
     
     const editor = useEditor({
         extensions: [
-            StarterKit,
+            CustomDocument,
+            StarterKit.configure({
+                document: false,
+            }),
             Placeholder.configure({
-                placeholder: props.placeholder || 'Start typing...',
+                placeholder: ({ node }) => {
+                    if (node.type.name === 'heading') {
+                        return props.titlePlaceholder || 'Untitled';
+                    }
+                    return props.placeholder || '';
+                },
+                // Make the placeholder more noticeable
                 emptyEditorClass: 'is-editor-empty',
+                emptyNodeClass: 'is-node-empty',
+            }),
+            RequiredHeading, // Add our custom extension
+            Underline,
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+                defaultAlignment: 'left',
+            }),
+            Image,
+            Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                    class: 'cursor-pointer text-blue-500 underline',
+                },
             }),
         ],
-        autofocus: true,
+        autofocus: 'start',
         editorProps: {
             attributes: {
-                class: "flex-1 h-full overscroll-auto",
+              class: "h-full focus:outline-none prose dark:prose-invert max-w-none"
             },
         },
         content: initialContent,
         onUpdate({ editor }) {
             const plainText = editor.getText();
             const html = editor.getHTML();
+            
+            // Extract title from the first heading
+            const titleNode = editor.getJSON().content?.find(node => 
+                node.type === 'heading'
+            );
+            
+            const title = titleNode?.content?.[0]?.text || '';
+            
             if (props.updateContent) {
-                props.updateContent(plainText);
+                props.updateContent(plainText, title);
             } else {
                 setDocumentHTML(html);
                 setDocumentPlainText(plainText);
+                if (title) {
+                    setDocumentTitle(title);
+                }
             }
         },
     });
 
-    const handleContainerClick = () => {
-        if (editor && !editor.isFocused) {
-            editor.commands.focus("end");
+    useEffect(() => {
+        if (editor) {
+            // Add a function to check if heading is empty before submitting/navigating away
+            const validateHeading = () => {
+                const headingNode = editor.getJSON().content?.find(node => 
+                    node.type === 'heading'
+                );
+                
+                const headingText = headingNode?.content?.[0]?.text || '';
+                
+                if (!headingText.trim()) {
+                    // Focus the editor on the heading
+                    editor.commands.focus('start');
+                    
+                    // Add visual indication
+                    const headingElement = document.querySelector('h1');
+                    if (headingElement) {
+                        headingElement.classList.add('required-heading-empty');
+                        setTimeout(() => {
+                            headingElement.classList.remove('required-heading-empty');
+                        }, 800);
+                    }
+                    
+                    return false;
+                }
+                
+                return true;
+            };
+            
+            // Expose this method through the editor instance for external access
+            editor.validateHeading = validateHeading;
         }
-    };
+    }, [editor]);
 
-    // Add CSS for placeholder (in your actual CSS file)
-    // .is-editor-empty:first-child::before {
-    //     content: attr(data-placeholder);
-    //     float: left;
-    //     color: #adb5bd;
-    //     pointer-events: none;
-    //     height: 0;
-    // }
-
+    if (!editor) {
+        return null;
+    }
+    
     return (
-        <div
-            className="h-full w-full overflow-scroll"
-            onClick={handleContainerClick}
-        >
-            {editor && (
-                <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-                    <div
-                        className="flex flex-row items-center justify-center text-xs shadow-lg border h-8 rounded-md p-0.5 space-x-0.5"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <Toggle
-                            size={"xs"}
-                            aria-label="Toggle bold"
-                            pressed={editor.isActive("bold")}
-                            onClick={() => editor.chain().focus().toggleBold().run()}
-                        >
-                            <Bold className="max-w-3" />
-                        </Toggle>
-                        <Toggle
-                            size={"xs"}
-                            aria-label="Toggle Italic"
-                            pressed={editor.isActive("italic")}
-                            onClick={() => editor.chain().focus().toggleItalic().run()}
-                        >
-                            <Italic className="max-w-3" />
-                        </Toggle>
-                        <Toggle
-                            size={"xs"}
-                            aria-label="Toggle Strikethrough"
-                            pressed={editor.isActive("strike")}
-                            onClick={() => editor.chain().focus().toggleStrike().run()}
-                        >
-                            <Strikethrough className="max-w-3" />
-                        </Toggle>
-                    </div>
-                </BubbleMenu>
-            )}
-            <EditorContent editor={editor} className="mx-24 mt-24 text-xs" />
+        <div className="flex flex-col w-full h-full overflow-hidden">
+            {/* Toolbar - Fixed at the top, scrolls horizontally */}
+            <div className="flex overflow-hidden">
+                <EditorToolbar editor={editor} />
+            </div>
+            
+            {/* Editor Content - Scrolls vertically and takes remaining space */}
+            <div className="flex-1 overflow-hidden">
+                <div className="h-full px-6 py-4">
+                    <EditorContent editor={editor} className="h-full" />
+                </div>
+            </div>
         </div>
     );
 };
