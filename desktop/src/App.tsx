@@ -18,6 +18,7 @@ import useEditorStore from "@/stores/editorStore";
 import { initStore } from "@/lib/stronghold";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemePanel } from "./components/command/ThemePanel";
+import { GeneratePanel } from "./components/command/GeneratePanel";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +54,7 @@ function App() {
 				<Tiptap />
 				<CommandDialogDemo />
 				<SearchPanel />
+				<GeneratePanel />
         <ThemePanel />
 			</SidebarInset>
 		</SidebarProvider>

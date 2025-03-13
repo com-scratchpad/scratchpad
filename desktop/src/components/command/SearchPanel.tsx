@@ -21,7 +21,7 @@ export function SearchPanel() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      navigate(`/generate`);
+      navigate(`/search`);
       panel.setPanel(Panel.SEARCH, false); 
     }
   };
