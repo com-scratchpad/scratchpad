@@ -144,7 +144,7 @@ export const EditorToolbar = ({ editor }: EditorToolbarProps) => {
   const disableHeadingChange = isFirstHeading();
 
   return (
-    <div className="flex p-1 w-full  max-h-10 items-center overflow-hidden overscroll-none justify-center " >
+    <div className="flex p-1 w-full  max-h-10 items-center overflow-hidden overscroll-none justify-start" >
         {/* Text Styling */}
         <ToggleGroup type="single" size="xs" value={activeFormats.textStyle} onValueChange={handleTextStyleChange}>
           <ToggleGroupItem value="bold" aria-label="Bold">

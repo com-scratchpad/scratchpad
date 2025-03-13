@@ -175,7 +175,7 @@ export default (props: TiptapProps) => {
         <div className="flex flex-col w-full h-full overflow-hidden">
       <div className="w-full">
         <div className="w-full overflow-x-scroll">
-          <div className="flex flex-nowrap min-w-max py-1">
+          <div className="flex flex-nowrap min-w-max">
             <EditorToolbar editor={editor} />
           </div>
         </div>

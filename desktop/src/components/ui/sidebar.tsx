@@ -19,6 +19,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useNavigate } from "react-router-dom";
+import { isTauri } from "@/platform";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -325,7 +326,7 @@ const SidebarNavigator = React.forwardRef<
       className={cn(
         "absolute top-1.5 z-50 flex items-center gap-.5",
         "transition-all duration-250 ease-in-out",
-        isMacOS && !open ? "left-26" : "left-76",
+        isMacOS && !isTauri() && !open ? "left-26" : "left-76",
         className
       )}
     >
