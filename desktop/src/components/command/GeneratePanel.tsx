@@ -13,29 +13,29 @@ import { DatePickerWithRange } from "../ui/datepicker";
 import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
 
-export function SearchPanel() {
+export function GeneratePanel() {
   const navigate = useNavigate();
   const panel = usePanelStore((state) => state);
   const [caseSensitive, setCaseSensitive] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [generateQuery, setSearchQuery] = React.useState("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      navigate(`/search`);
-      panel.setPanel(Panel.SEARCH, false); 
+      navigate(`/generate`);
+      panel.setPanel(Panel.GENERATE, false); 
     }
   };
 
   return (
     <CommandDialog
-      open={panel.search}
-      onOpenChange={(open) => panel.setPanel(Panel.SEARCH, open)}
+      open={panel.generate}
+      onOpenChange={(open) => panel.setPanel(Panel.GENERATE, open)}
     >
       <CommandItem>
         <Input
           className="ring-0 border-0 focus-visible:ring-offset-0 focus-visible:ring-0"
-          placeholder="Search..."
-          value={searchQuery}
+          placeholder="Generate..."
+          value={generateQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={handleKeyDown}
         />
@@ -43,7 +43,7 @@ export function SearchPanel() {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandSeparator />
-        <CommandGroup heading="Search Options">
+        <CommandGroup heading="Generate Options">
           <CommandItem
             onSelect={() => setCaseSensitive(!caseSensitive)}
             className="flex justify-between items-center"
@@ -62,3 +62,4 @@ export function SearchPanel() {
     </CommandDialog>
   );
 }
+

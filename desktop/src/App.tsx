@@ -3,19 +3,15 @@ import Tiptap from "@/components/tiptap/Tiptap";
 import { CommandDialogDemo } from "@/components/command/command";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { SearchPanel } from "@/components/command/SearchPanel";
-import useEditorStore from "@/stores/editorStore";
 import { initStore } from "@/lib/stronghold";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemePanel } from "./components/command/ThemePanel";
 import MinimalSidebar from "./AppSidebar";
+import { GeneratePanel } from "./components/command/GeneratePanel";
+import { SearchPanel } from "./components/command/SearchPanel";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
-  const {
-    documentTitle,
-    documentPlainText,
-  } = useEditorStore();
 
   useEffect(()=> {initStore()}, [])
 
@@ -37,6 +33,7 @@ function App() {
         <MinimalSidebar />
       </div>
       <CommandDialogDemo />
+      <GeneratePanel />
       <SearchPanel />
       <ThemePanel />
     </div>

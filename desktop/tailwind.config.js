@@ -4,6 +4,74 @@ export default {
   content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+      typography: (theme) => ({
+        'compact': {
+          css: {
+            fontSize: '0.875rem',
+            lineHeight: 1.6,
+            p: {
+              marginTop: theme('spacing.2'),
+              marginBottom: theme('spacing.2'),
+            },
+            h1: {
+              fontSize: '1.25rem',
+              marginTop: '1.5rem',
+              marginBottom: '0.75rem',
+              lineHeight: 1.3,
+            },
+            h2: {
+              fontSize: '1.15rem',
+              marginTop: '1.25rem',
+              marginBottom: '0.75rem',
+              lineHeight: 1.35,
+            },
+            h3: {
+              fontSize: '1.05rem',
+              marginTop: '1rem',
+              marginBottom: '0.5rem',
+            },
+            blockquote: {
+              paddingLeft: theme('spacing.3'),
+              marginTop: theme('spacing.3'),
+              marginBottom: theme('spacing.3'),
+            },
+            'ul, ol': {
+              marginTop: theme('spacing.2'),
+              marginBottom: theme('spacing.2'),
+              paddingLeft: theme('spacing.4'),
+            },
+            li: {
+              marginTop: theme('spacing.1'),
+              marginBottom: theme('spacing.1'),
+            },
+            img: {
+              marginTop: theme('spacing.3'),
+              marginBottom: theme('spacing.3'),
+            },
+            pre: {
+              fontSize: '0.8rem',
+              padding: theme('spacing.2'),
+              marginTop: theme('spacing.3'),
+              marginBottom: theme('spacing.3'),
+            },
+            code: {
+              fontSize: '0.8em',
+              padding: '0.15em 0.3em',
+            },
+            'pre code': {
+              fontSize: 'inherit',
+              padding: 0,
+            },
+            hr: {
+              marginTop: theme('spacing.4'),
+              marginBottom: theme('spacing.4'),
+            },
+            table: {
+              fontSize: '0.8rem',
+            },
+          },
+        },
+      }),
   		spacing: {
   			'18': '4.5rem',
   			'26': '6.5rem',

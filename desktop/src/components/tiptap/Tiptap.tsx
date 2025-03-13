@@ -110,7 +110,7 @@ export default (props: TiptapProps) => {
         autofocus: 'start',
         editorProps: {
             attributes: {
-              class: "h-full focus:outline-none prose dark:prose-invert max-w-none"
+              class: "h-full focus:outline-none prose-compact dark:prose-invert-compact max-w-none"
             },
         },
         content: initialContent,
