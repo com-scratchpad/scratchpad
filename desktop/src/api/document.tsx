@@ -64,6 +64,39 @@ export type DocumentProps = {
     title: string;
     content: string;
 }
+
+/**
+ * Search for documents with optional file type filtering
+ * @param query Search query string
+ * @param fileType Optional file type filter (e.g., 'pdf', 'txt')
+ * @returns Search results from the server
+ */
+export async function searchDocuments(query: string, fileType?: string) {
+  try {
+    const token = await getToken();
+    const response = await fetch('http://localhost:8000/secure/file_search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        query,
+        file_type: fileType
+      })
+    });
+
+    if (response.ok) {
+      return await response.json();
+    }
+
+    throw new Error(`Failed to search documents: ${response.statusText}`);
+  } catch (error) {
+    console.error('Error searching documents:', error);
+    return null;
+  }
+}
+
 /**
  * 
  * @param props - DocumentProps which contains the title and content of the document

@@ -30,6 +30,8 @@ export const router = createBrowserRouter([
 				<GenerateLayout children/>
 			</AuthGuard>
 		),
+		
+		
 	},
 	{
 		path: "/search",
@@ -38,6 +40,6 @@ export const router = createBrowserRouter([
 				<SearchLayout children/>
 			</AuthGuard>
 		),
-	},
+	}
 ]);
 

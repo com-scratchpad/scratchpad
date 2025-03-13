@@ -1,4 +1,4 @@
-import "@/App.css";
+import "./App.css";
 import Tiptap from "@/components/tiptap/Tiptap";
 import { CommandDialogDemo } from "@/components/command/command";
 import { useEffect, useState } from "react";

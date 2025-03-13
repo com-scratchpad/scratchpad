@@ -14,6 +14,7 @@ async def create_document(document: CreateDocumentRequest, request: Request):
         response = supabase_client.table(DOCUMENTS_TABLE).insert({
             "user_id": request.state.user_id,
             "name": document.name,
+            "file_type": document.file_type,  
         }).execute()
     except Exception as e:
         logger.e(f"Failed to save chunk with exception: {e}") 
@@ -72,9 +73,23 @@ async def delete_document(delete: DeleteDocumentRequest, request: Request):
 async def update_document(update: UpdateDocumentRequest, request: Request):
     if update.file_content.strip() == "":
         return Response("Received empty file content, skipping chunk deletion", status_code=200)
+    
     document_id = update.document_id
-    chunks = chunk_text(request.state.openai, update.file_content)
     supabase_client = request.state.supabase
+    
+    # Update file_type if provided
+    if update.file_type:
+        try:
+            supabase_client.table(DOCUMENTS_TABLE).update(
+                {"file_type": update.file_type}
+            ).eq("id", document_id).execute()
+        except Exception as e:
+            logger.e(f"Failed to update file type with exception: {e}")
+            return Response(f"Failed to update file type: {e}", status_code=500)
+    
+    # Process chunks as before
+    chunks = chunk_text(request.state.openai, update.file_content)
+    
     # First, delete existing chunks for the document
     try:
         supabase_client.table(CHUNKS_TABLE).delete().eq("document_id", document_id).execute()

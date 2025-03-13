@@ -6,6 +6,7 @@ from typing import List, Optional
 class CreateDocumentRequest(BaseModel):
     name: str
     file_content: str
+    file_type: str  
     embedding: Optional[List[float]] = None
 
 
@@ -18,3 +19,4 @@ class DeleteDocumentRequest(BaseModel):
 class UpdateDocumentRequest(BaseModel):
     document_id: str
     file_content: str
+    file_type: Optional[str] = None  # Add this field as optional
