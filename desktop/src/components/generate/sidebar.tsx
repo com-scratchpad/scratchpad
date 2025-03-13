@@ -7,7 +7,7 @@ import {
   SidebarGroupContent,
   SidebarMenu,
 } from "@/components/ui/sidebar"
-import { SearchInput } from "./search_input"
+import { SearchInput } from "./generate_input"
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";

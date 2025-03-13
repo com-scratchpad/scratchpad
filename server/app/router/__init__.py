@@ -7,7 +7,7 @@ from app.router.endpoints.document import create_document, delete_document, upda
 from app.router.endpoints.friend import add_friend
 from app.router.endpoints.login import login
 from app.router.endpoints.register import register
-from app.router.endpoints.search import search, search_friends
+from app.router.endpoints.search import search_chunks, search_friends
 from app.router.endpoints.summarize import summarize
 from app.router.middleware.http import AuthMiddleware
 from app.router.endpoints.file_Search import file_search
@@ -26,7 +26,7 @@ def init_router():
     secure_app.add_api_route("/document", delete_document, methods=["DELETE"])
     secure_app.add_api_route("/document", update_document, methods=["PATCH"])
     secure_app.add_api_route("/friend", add_friend, methods=["POST"])
-    secure_app.add_api_route("/search", search, methods=["POST"])
+    secure_app.add_api_route("/search_chunks", search_chunks, methods=["POST"])
     secure_app.add_api_route("/search_friends", search_friends, methods=["POST"])
     secure_app.add_api_route("/summarize", summarize, methods=["POST"])
     secure_app.add_api_route("/file_search", file_search, methods=["POST"])
