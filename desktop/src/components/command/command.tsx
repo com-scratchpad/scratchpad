@@ -1,10 +1,10 @@
 import * as React from "react";
 import {
-  Command,
+  BrainCog,
   CreditCard,
   Palette,
-  Search,
   Settings,
+  Search,
   User,
 } from "lucide-react";
 
@@ -48,7 +48,7 @@ export function CommandDialogDemo() {
       >
         <CommandInput
           className="max-h-10"
-          placeholder="Type a command or search..."
+          placeholder="Type a command or generate..."
         />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
@@ -58,7 +58,7 @@ export function CommandDialogDemo() {
               <span>Search</span>
             </CommandItem>
             <CommandItem onSelect={() => panel.setPanel(Panel.GENERATE, true)}>
-              <Search />
+              <BrainCog />
               <span>Generate</span>
             </CommandItem>
             <CommandItem onSelect={() => panel.setPanel(Panel.THEME, true)}>
