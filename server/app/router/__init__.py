@@ -9,8 +9,8 @@ from app.router.endpoints.login import login
 from app.router.endpoints.register import register
 from app.router.endpoints.search import search_chunks, search_friends
 from app.router.endpoints.summarize import summarize
+from app.router.endpoints.file_search import file_search
 from app.router.middleware.http import AuthMiddleware
-from app.router.endpoints.file_Search import file_search
 
 
 # Main entrypoint for scratchpad backend. Defines secure and public routes. Add new
