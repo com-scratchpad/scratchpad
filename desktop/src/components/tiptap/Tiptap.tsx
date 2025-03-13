@@ -12,12 +12,10 @@ import useEditorStore from "@/stores/editorStore";
 import { EditorToolbar } from "@/tiptap/toolbar";
 import { useEffect } from "react";
 
-// Create a custom document that enforces the structure
 const CustomDocument = Document.extend({
   content: 'heading block*',
 })
 
-// Custom extension to enforce non-empty title field
 const RequiredHeading = Extension.create({
   name: 'requiredHeading',
 
@@ -141,7 +139,6 @@ export default (props: TiptapProps) => {
 
     useEffect(() => {
         if (editor) {
-            // Add a function to check if heading is empty before submitting/navigating away
             const validateHeading = () => {
                 const headingNode = editor.getJSON().content?.find(node => 
                     node.type === 'heading'
@@ -150,10 +147,8 @@ export default (props: TiptapProps) => {
                 const headingText = headingNode?.content?.[0]?.text || '';
                 
                 if (!headingText.trim()) {
-                    // Focus the editor on the heading
                     editor.commands.focus('start');
                     
-                    // Add visual indication
                     const headingElement = document.querySelector('h1');
                     if (headingElement) {
                         headingElement.classList.add('required-heading-empty');
@@ -168,7 +163,6 @@ export default (props: TiptapProps) => {
                 return true;
             };
             
-            // Expose this method through the editor instance for external access
             editor.validateHeading = validateHeading;
         }
     }, [editor]);
@@ -179,17 +173,19 @@ export default (props: TiptapProps) => {
     
     return (
         <div className="flex flex-col w-full h-full overflow-hidden">
-            {/* Toolbar - Fixed at the top, scrolls horizontally */}
-            <div className="flex overflow-hidden">
-                <EditorToolbar editor={editor} />
-            </div>
-            
-            {/* Editor Content - Scrolls vertically and takes remaining space */}
-            <div className="flex-1 overflow-hidden">
-                <div className="h-full px-2 py-4">
-                    <EditorContent editor={editor} className="h-full" />
-                </div>
-            </div>
+      <div className="w-full">
+        <div className="w-full overflow-x-scroll">
+          <div className="flex flex-nowrap min-w-max py-1">
+            <EditorToolbar editor={editor} />
+          </div>
         </div>
+      </div>
+      
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full px-2 py-4 overflow-y-auto">
+          <EditorContent editor={editor} className="h-full" />
+        </div>
+      </div>
+    </div>
     );
 };
