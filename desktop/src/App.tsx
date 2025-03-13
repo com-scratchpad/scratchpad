@@ -30,7 +30,7 @@ function App() {
       >
         {/* Header content */}
       </header>
-      <div className="flex-1 mx-12 overflow-hidden flex">
+      <div className="flex-1 mx-6 overflow-hidden flex">
         <div className="flex-1 mr-6 overflow-auto">
           <Tiptap />
         </div>

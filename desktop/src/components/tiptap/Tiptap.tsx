@@ -186,7 +186,7 @@ export default (props: TiptapProps) => {
             
             {/* Editor Content - Scrolls vertically and takes remaining space */}
             <div className="flex-1 overflow-hidden">
-                <div className="h-full px-6 py-4">
+                <div className="h-full px-2 py-4">
                     <EditorContent editor={editor} className="h-full" />
                 </div>
             </div>
