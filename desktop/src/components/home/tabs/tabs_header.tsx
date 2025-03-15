@@ -9,6 +9,7 @@ import { useRef, useEffect, useState } from "react";
 import SettingsDropdown from "@/components/home/tabs/settings_dropdown";
 import { logout } from "@/api/auth";
 import { useNavigate } from "react-router-dom";
+import { Panel, usePanelStore } from "@/stores/commandStore";
 
 const TabItem = ({ 
   tab, 
@@ -126,6 +127,7 @@ export function TabsHeader() {
   const [activeTabPos, setActiveTabPos] = useState<{ left: number, right: number } | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
   const navigate = useNavigate();
+  const commandStore = usePanelStore();
   
   const updateActiveTabPosition = (rect: DOMRect | null) => {
     if (rect && containerRef.current) {
@@ -161,6 +163,7 @@ export function TabsHeader() {
   const handleSettings = () => {
     console.log("Settings clicked");
     // Implement settings navigation or modal here
+    commandStore.setPanel(Panel.SETTINGS, true);
   };
 
   const handleLogout = async () => {

@@ -5,7 +5,8 @@ interface PanelState {
 	search: boolean;
 	generate: boolean;
 	editor: boolean;
-  	theme: boolean;
+  theme: boolean;
+  settings: boolean;
 	setPanel: (panel: Panel, isOpen?: boolean) => void;
 }
 
@@ -14,8 +15,8 @@ export enum Panel {
   SEARCH = "search",
   GENERATE = "generate",
   EDITOR = "editor",
-  THEME = "theme"
-  
+  THEME = "theme",
+  SETTINGS = "settings"
 }
 
 export const usePanelStore = create<PanelState>((set) => ({
@@ -23,7 +24,8 @@ export const usePanelStore = create<PanelState>((set) => ({
 	search: false,
 	generate: false,
 	editor: false,
-  	theme: false,
+  theme: false,
+  settings: false,
 	setPanel: (panel: Panel, isOpen?: boolean) =>
 		set((_) => {
 			var newState = {} as PanelState;

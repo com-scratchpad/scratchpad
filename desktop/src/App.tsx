@@ -15,6 +15,7 @@ import TabContent from "@/components/home/tabs/tab_content";
 import { useTabStore } from "@/stores/tabStore";
 import { TelescopePanel } from "./components/command/TelescopePanel";
 import { useKeyHandler } from "@/KeyPrefix";
+import { SettingsPanel } from "./components/command/settings_panel";
 
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
       <SearchPanel />
       <ThemePanel />
       <TelescopePanel />
+      <SettingsPanel />
     </div>
   );
 }

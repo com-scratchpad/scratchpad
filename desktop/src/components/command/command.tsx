@@ -78,7 +78,7 @@ export function CommandDialogDemo() {
               <span>Billing</span>
               <CommandShortcut>⌘B</CommandShortcut>
             </CommandItem>
-            <CommandItem>
+            <CommandItem onSelect={() => panel.setPanel(Panel.SETTINGS, true)}>
               <Settings />
               <span>Settings</span>
               <CommandShortcut>⌘S</CommandShortcut>
