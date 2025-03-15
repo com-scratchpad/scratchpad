@@ -1,0 +1,229 @@
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Plus, X } from "lucide-react";
+import { Tab, useTabStore } from "@/stores/tabStore";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import clsx from 'clsx';
+import { isTauri } from '@/platform';
+import { useRef, useEffect, useState } from "react";
+
+const TabItem = ({ 
+  tab, 
+  isActive, 
+  onClick, 
+  onClose,
+  index,
+  updateActiveTabPosition
+}: { 
+  tab: Tab; 
+  isActive: boolean; 
+  onClick: () => void;
+  onClose: (e: React.MouseEvent) => void;
+  index: number;
+  updateActiveTabPosition: (rect: DOMRect | null) => void;
+}) => {
+  const tabRef = useRef<HTMLDivElement>(null);
+  
+  // Report this tab's position if it's active
+  useEffect(() => {
+    if (isActive && tabRef.current) {
+      updateActiveTabPosition(tabRef.current.getBoundingClientRect());
+    }
+  }, [isActive, updateActiveTabPosition]);
+  
+  return (
+    <div
+      ref={tabRef}
+      className={cn(
+        "group relative flex items-center gap-1 h-9 px-3 py-1.5 cursor-pointer text-xs transition-all",
+        "mx-0.5 mt-1.5 rounded-t-md",
+        isActive 
+          ? "bg-background text-foreground z-10" 
+          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+      )}
+      onClick={onClick}
+      data-active={isActive}
+      data-index={index}
+    >
+      {/* Tab content */}
+      <span className="truncate max-w-[120px] relative z-10">{tab.title}</span>
+      <button
+        className={cn(
+          "opacity-0 group-hover:opacity-100 ml-1 text-muted-foreground hover:text-foreground transition-opacity relative z-10",
+          isActive && "opacity-100"
+        )}
+        onClick={onClose}
+      >
+        <X size={14} />
+      </button>
+      
+      {/* Custom borders with rounded bottom corners for active tab */}
+      {isActive && (
+        <>
+          {/* Top and sides border */}
+          <div 
+            className="absolute inset-0 rounded-t-md pointer-events-none"
+            style={{
+              borderTop: '1px solid hsl(var(--border))',
+              borderLeft: '1px solid hsl(var(--border))',
+              borderRight: '1px solid hsl(var(--border))',
+              borderBottom: 'none',
+              height: `calc(100% - 5px)`
+            }}
+          />
+          
+          {/* Left curved corner - flipped horizontally */}
+          <div 
+            className="absolute pointer-events-none z-5"
+            style={{
+              left: '-4px',
+              bottom: 0,
+              width: '5px',
+              height: '5px',
+              borderRight: '1px solid hsl(var(--border))',
+              borderBottom: '1px solid hsl(var(--border))',
+              borderBottomRightRadius: '5px',
+              background: 'hsl(var(--background))'
+            }}
+          />
+          
+          {/* Right curved corner - flipped horizontally */}
+          <div 
+            className="absolute pointer-events-none z-5"
+            style={{
+              right: '-4px',
+              bottom: 0,
+              width: '5px',
+              height: '5px',
+              borderLeft: '1px solid hsl(var(--border))',
+              borderBottom: '1px solid hsl(var(--border))',
+              borderBottomLeftRadius: '5px',
+              background: 'hsl(var(--background))'
+            }}
+          />
+        </>
+      )}
+    </div>
+  );
+};
+
+export function TabsHeader() {
+  const { tabs, activeTabId, createTab, setActiveTab, deleteTab } = useTabStore();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeTabPos, setActiveTabPos] = useState<{ left: number, right: number } | null>(null);
+  
+  const updateActiveTabPosition = (rect: DOMRect | null) => {
+    if (rect && containerRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      setActiveTabPos({
+        left: rect.left - containerRect.left,
+        right: rect.right - containerRect.left
+      });
+    } else {
+      setActiveTabPos(null);
+    }
+  };
+
+  const handleTabClick = (id: string) => {
+    setActiveTab(id);
+  };
+
+  const handleTabClose = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    deleteTab(id);
+  };
+
+  const handleNewTab = () => {
+    createTab();
+  };
+
+  // Create a first tab if there are none
+  if (tabs.length === 0) {
+    return (
+      <div className="flex h-10 items-center border-b border-border px-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-7 w-7 p-0 rounded-sm"
+          onClick={handleNewTab}
+        >
+          <Plus size={16} />
+          <span className="sr-only">New Tab</span>
+        </Button>
+        <div className="flex-1" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative" ref={containerRef}>
+      <div 
+        className={clsx(
+          "flex items-center relative overflow-x-auto scrollbar-hide",
+          {
+            "pl-20": isTauri()
+          }
+        )}
+      >
+        <div className="flex items-center h-full">
+          {tabs.map((tab, index) => (
+            <TabItem
+              key={tab.id}
+              tab={tab}
+              isActive={tab.id === activeTabId}
+              onClick={() => handleTabClick(tab.id)}
+              onClose={(e) => handleTabClose(e, tab.id)}
+              index={index}
+              updateActiveTabPosition={updateActiveTabPosition}
+            />
+          ))}
+        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 min-w-7 p-0 ml-2 rounded-sm flex-shrink-0"
+                onClick={handleNewTab}
+              >
+                <Plus size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>New Tab</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+      
+      {/* Split bottom border that skips the active tab */}
+      {activeTabPos ? (
+        <>
+          {/* Left border segment */}
+          <div 
+            className="h-[1px] bg-border absolute bottom-0 z-0" 
+            style={{
+              left: 0,
+              width: `${activeTabPos.left - 4}px` // Reduced to create larger gap
+            }}
+          />
+          
+          {/* Right border segment */}
+          <div 
+            className="h-[1px] bg-border absolute bottom-0 z-0" 
+            style={{
+              left: `${activeTabPos.right + 4}px`, // Moved right to create larger gap
+              right: 0
+            }}
+          />
+        </>
+      ) : (
+        // Fallback full border if no active tab position
+        <div className="h-[1px] w-full bg-border relative z-0" />
+      )}
+    </div>
+  );
+}
+
+export default TabsHeader;

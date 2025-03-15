@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { 
   ToggleGroup, 
   ToggleGroupItem 
@@ -25,64 +24,21 @@ import {
   Code,
   Quote
 } from "lucide-react";
+import { useTabStore } from "@/stores/tabStore";
 
 interface EditorToolbarProps {
   editor: any; // You can use a more specific type from TipTap
 }
 
 export const EditorToolbar = ({ editor }: EditorToolbarProps) => {
-  // State to track which formatting groups are active
-  const [activeFormats, setActiveFormats] = useState({
+  // Get active tab and its editor state from the store
+  const activeTab = useTabStore(state => state.getActiveTab());
+  const activeFormats = activeTab?.editorState?.activeFormats || {
     textStyle: '',
     headingLevel: '',
     alignment: 'left',
-  });
-
-  // Update the active states when editor selection changes
-  useEffect(() => {
-    if (!editor) return;
-
-    // Set up a listener for editor selection changes
-    const updateActiveFormats = () => {
-      // Text styles
-      let textStyle = '';
-      if (editor.isActive('bold')) textStyle = 'bold';
-      else if (editor.isActive('italic')) textStyle = 'italic';
-      else if (editor.isActive('underline')) textStyle = 'underline';
-      else if (editor.isActive('strike')) textStyle = 'strike';
-      
-      // Heading level
-      let headingLevel = '';
-      if (editor.isActive('heading', { level: 1 })) headingLevel = 'h1';
-      else if (editor.isActive('heading', { level: 2 })) headingLevel = 'h2';
-      else if (editor.isActive('heading', { level: 3 })) headingLevel = 'h3';
-      
-      // Alignment (requires text-align extension)
-      let alignment = 'left';
-      if (editor.isActive({ textAlign: 'center' })) alignment = 'center';
-      else if (editor.isActive({ textAlign: 'right' })) alignment = 'right';
-      else if (editor.isActive({ textAlign: 'justify' })) alignment = 'justify';
-      
-      setActiveFormats({
-        textStyle,
-        headingLevel,
-        alignment
-      });
-    };
-    
-    // Update on selection change
-    editor.on('selectionUpdate', updateActiveFormats);
-    editor.on('transaction', updateActiveFormats);
-    
-    // Initial state
-    updateActiveFormats();
-    
-    // Cleanup
-    return () => {
-      editor.off('selectionUpdate', updateActiveFormats);
-      editor.off('transaction', updateActiveFormats);
-    };
-  }, [editor]);
+    listType: null
+  };
 
   if (!editor) {
     return null;
@@ -144,7 +100,7 @@ export const EditorToolbar = ({ editor }: EditorToolbarProps) => {
   const disableHeadingChange = isFirstHeading();
 
   return (
-    <div className="flex p-1 w-full  max-h-10 items-center overflow-hidden overscroll-none justify-start" >
+    <div className="flex p-1 w-full max-h-10 items-center overflow-hidden overscroll-none justify-start">
         {/* Text Styling */}
         <ToggleGroup type="single" size="xs" value={activeFormats.textStyle} onValueChange={handleTextStyleChange}>
           <ToggleGroupItem value="bold" aria-label="Bold">
@@ -203,11 +159,10 @@ export const EditorToolbar = ({ editor }: EditorToolbarProps) => {
         <Separator orientation="vertical" className="h-6 mx-0.5" />
 
         {/* Lists */}
-        <ToggleGroup type="single" size="xs">
+        <ToggleGroup type="single" size="xs" value={activeFormats.listType || undefined}>
           <ToggleGroupItem 
             value="bulletList" 
             aria-label="Bullet list"
-            pressed={editor.isActive('bulletList')}
             onClick={() => editor.chain().focus().toggleBulletList().run()}
           >
             <List className="size-3.5" />
@@ -215,7 +170,6 @@ export const EditorToolbar = ({ editor }: EditorToolbarProps) => {
           <ToggleGroupItem 
             value="orderedList" 
             aria-label="Ordered list"
-            pressed={editor.isActive('orderedList')}
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
           >
             <ListOrdered className="size-3.5" />
