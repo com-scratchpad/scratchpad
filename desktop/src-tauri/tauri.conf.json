@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "mosiac",
+  "productName": "mosaic",
   "version": "0.1.0",
-  "identifier": "com.mosiac.app",
+  "identifier": "com.mosaic.app",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:1420",

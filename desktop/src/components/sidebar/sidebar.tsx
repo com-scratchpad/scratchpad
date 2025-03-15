@@ -14,7 +14,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar className="border-r-0" {...props}>
             <SidebarHeader className="pt-9">
-                Mosiac
+                Mosaic 
                 <NavDocuments/>
             </SidebarHeader>
             <SidebarRail />
