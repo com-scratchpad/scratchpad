@@ -6,6 +6,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import clsx from 'clsx';
 import { isTauri } from '@/platform';
 import { useRef, useEffect, useState } from "react";
+import SettingsDropdown from "@/components/home/tabs/settings_dropdown";
+import { logout } from "@/api/auth";
+import { useNavigate } from "react-router-dom";
 
 const TabItem = ({ 
   tab, 
@@ -121,6 +124,8 @@ export function TabsHeader() {
   const { tabs, activeTabId, createTab, setActiveTab, deleteTab } = useTabStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeTabPos, setActiveTabPos] = useState<{ left: number, right: number } | null>(null);
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
+  const navigate = useNavigate();
   
   const updateActiveTabPosition = (rect: DOMRect | null) => {
     if (rect && containerRef.current) {
@@ -147,6 +152,34 @@ export function TabsHeader() {
     createTab();
   };
 
+  const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
+    setTheme(newTheme);
+    // You would implement actual theme switching logic here
+    console.log(`Theme switched to: ${newTheme}`);
+  };
+
+  const handleSettings = () => {
+    console.log("Settings clicked");
+    // Implement settings navigation or modal here
+  };
+
+  const handleLogout = async () => {
+    try {
+      console.log("Logout clicked");
+      await logout();
+      
+      // Add a small delay to ensure state updates complete
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+        navigate(0)
+      }, 100);
+    } catch (error) {
+      console.error("Logout error:", error);
+      navigate("/login", { replace: true });
+      navigate(0)
+    }
+  };
+
   // Create a first tab if there are none
   if (tabs.length === 0) {
     return (
@@ -165,6 +198,16 @@ export function TabsHeader() {
           <span className="sr-only">New Tab</span>
         </Button>
         <div className="flex-1" data-tauri-drag-region="true" />
+        
+        {/* Menu button */}
+        <div data-tauri-drag-region={false}>
+          <SettingsDropdown 
+            theme={theme} 
+            onThemeChange={handleThemeChange} 
+            onSettings={handleSettings} 
+            onLogout={handleLogout} 
+          />
+        </div>
       </div>
     );
   }
@@ -218,6 +261,18 @@ export function TabsHeader() {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+        
+        <div className="flex-1" data-tauri-drag-region="true" />
+        
+        {/* Settings dropdown menu */}
+        <div className="mr-2" data-tauri-drag-region={false}>
+          <SettingsDropdown 
+            theme={theme} 
+            onThemeChange={handleThemeChange} 
+            onSettings={handleSettings} 
+            onLogout={handleLogout} 
+          />
+        </div>
       </div>
       
       {/* Split bottom border that skips the active tab */}

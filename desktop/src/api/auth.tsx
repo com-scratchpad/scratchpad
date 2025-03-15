@@ -1,4 +1,4 @@
-import { storeCredentials as storeCredentials, initStore } from '@/lib/stronghold';
+import { storeCredentials as storeCredentials, initStore, clearCredentials } from '@/lib/stronghold';
 
 export type LoginProps = {
     email: string;
@@ -28,6 +28,11 @@ export async function login(props: LoginProps) {
     if (!token) throw new Error("No token received");
 
     await storeCredentials(data); // Securely store token using Stronghold
+}
+
+export async function logout() {
+    await initStore();
+    await clearCredentials();
 }
 
 export async function register(props: LoginProps) {
