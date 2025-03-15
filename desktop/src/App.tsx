@@ -14,14 +14,14 @@ import TabsHeader from "@/components/home/tabs/tabs_header";
 import TabContent from "@/components/home/tabs/tab_content";
 import { useTabStore } from "@/stores/tabStore";
 import { TelescopePanel } from "./components/command/TelescopePanel";
-import { useKeyPrefix } from "./KeyPrefix";
+import { useKeyHandler } from "@/KeyPrefix";
 
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { tabs, activeTabId, createTab } = useTabStore();
-  useKeyPrefix();
+  useKeyHandler();
   
   useEffect(() => {
     // Init stores
